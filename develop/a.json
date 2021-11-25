@@ -1,0 +1,5 @@
+{
+  "statusCode": 200,
+  "message": "success",
+  "data": "[{\"io_size\": \"67014\", \"io_size_origin\": \"670R14\", \"io_part_no\": \"2000889\", \"io_pr\": \"8P\", \"io_max_weight\": \"101/99\", \"io_speed\": \"P\", \"io_car\": \"\", \"io_oe\": \"\", \"io_car_type\": \"\\ud2b8\\ub7ed/VAN\", \"io_tire_type\": \"\", \"io_factory_price\": \"101200\", \"io_maker\": \"\\ud55c\\uad6d\", \"it_name\": \"\\ub798\\ub514\\uc54c DU01\", \"it_pattern\": \"DU01\", \"it_season\": \"\\uc0ac\\uacc4\\uc808\\uc6a9\", \"it_performance_type\": \"\\uc628\\ub85c\\ub4dc (HT)\", \"tot_stock\": 10, \"io_price\": 90000}]"
+}
