@@ -146,6 +146,7 @@ def lambda_handler(event, context):
 
                     tot_price += price
                     it_sc_price = delivery_price
+                    it_sc_price = it_sc_price * ct_qty
                     it_sc_type = '1'
                     if it_sc_price > 0 and delivery_collect == '0':
                         it_sc_type = '3'
