@@ -86,7 +86,7 @@ def lambda_handler(event, context):
                 ct_qty = int(event['cart_item'][i]['ct_qty'])
                 if io_part_no and ct_qty:
                     cursor.execute("select io_no, it_id, delivery_idx, delivery_seller_no, sale_delivery, it_name, delivery_collect, io_size, io_id, delivery_price1, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type, idx "
-                                   "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_part_no=%s and io_btob_price is not null and io_btob_lowest is not null) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
+                                   "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_part_no=%s and io_btob_price > 0 and io_btob_lowest is not null) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
                                    "    left join ("
                                    "                select * from ("
                                    "                                    select * from ("
