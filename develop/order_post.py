@@ -86,11 +86,11 @@ def lambda_handler(event, context):
                 ct_qty = int(event['cart_item'][i]['ct_qty'])
                 if io_part_no and ct_qty:
                     cursor.execute("select io_no, it_id, delivery_idx, delivery_seller_no, sale_delivery, it_name, delivery_collect, io_size, io_id, delivery_price1, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type, idx "
-                                   "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_part_no=%s and io_btob_price is not null and io_btob_lowest is not null) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
+                                   "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_part_no=%s and io_btob_price > 0 and io_btob_lowest is not null) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
                                    "    left join ("
                                    "                select * from ("
                                    "                                    select * from ("
-                                   "                                                        select idx, io_no as stock_io_no, mb_no as delivery_seller_no, sale_delivery, stock, idx as delivery_idx, delivery_price as delivery_price1, delivery_collect from tbl_item_option_price_stock where stock > %s"
+                                   "                                                        select idx, io_no as stock_io_no, mb_no as delivery_seller_no, sale_delivery, stock, idx as delivery_idx, delivery_price as delivery_price1, delivery_collect from tbl_item_option_price_stock where stock >= %s"
                                    "                                                  ) stock"
                                    "                                    left join (select io_no as check_io_no, it_id as check_io_it_id, io_btob_lowest as check_btob_lowest from g5_shop_item_option where io_part_no=%s) check_option on check_option.check_io_no=stock.stock_io_no"
                                    "                                    left join (select it_id as check_it_id, ca_id as check_ca_id from g5_shop_item) check_item on check_item.check_it_id=check_option.check_io_it_id"
@@ -216,6 +216,7 @@ def lambda_handler(event, context):
                            "od_cal_coupon_point=0, od_receipt_price=%s, od_receipt_point=0, od_bank_account='', od_receipt_time=%s, od_misu=0, od_pg='cardoc', od_tno='', od_app_no='cardoc', od_escrow='', od_tax_flag='', od_tax_mny='', od_vat_mny='', od_free_mny='', od_status='입금', od_shop_memo='', od_hope_date='', od_time=%s, od_settle_case='cardoc', od_test='', od_vbank_expire='', od_reserv_date=%s",
                            (od_id, mb_id, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, length, tot_price, od_receipt_price, nowDatetime, nowDatetime, od_reserv_date))
             connection.commit()
+            connection.close()
 
             return {
                 'statusCode': 200,

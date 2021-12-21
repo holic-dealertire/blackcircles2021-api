@@ -27,7 +27,7 @@ def lambda_handler(event, context):
                    "    LEFT JOIN (SELECT ca_id, ca_name, image FROM   g5_shop_category WHERE  Length(ca_id) = 4 AND Substring(ca_id, 1, 2) = '10') category ON category.ca_id = item.it_ca_id /* 택배가격 */ "
                    "    LEFT JOIN (SELECT * FROM   "
                    "                (SELECT * FROM   "
-                   "                    (SELECT io_no AS stock_io_no, mb_no AS delivery_seller_no, sale_delivery, stock AS tot_stock, delivery_collect, delivery_price AS delivery_price1 FROM tbl_item_option_price_stock WHERE  stock != '' AND stock > 7) stock"
+                   "                    (SELECT io_no AS stock_io_no, mb_no AS delivery_seller_no, sale_delivery, stock AS tot_stock, delivery_collect, delivery_price AS delivery_price1 FROM tbl_item_option_price_stock WHERE  stock != '' AND stock > 1) stock"
                    "                     LEFT JOIN (select mb_no as seller_mb_no, delv_date from tbl_member_seller) seller on seller.seller_mb_no=stock.delivery_seller_no"                                                                                                                                                                                                                                                                                                                           
                    "                     LEFT JOIN (SELECT io_no AS check_io_no, it_id AS check_io_it_id, io_btob_lowest as check_btob_lowest FROM g5_shop_item_option WHERE  origin_io_no IS NULL and io_part_no='" + io_part_no + "' ) check_option ON check_option.check_io_no = stock.stock_io_no "
                    "                     LEFT JOIN (SELECT it_id AS check_it_id, ca_id AS check_ca_id, it_performance_type FROM g5_shop_item WHERE  origin_it_id IS NULL) check_item ON check_item.check_it_id = check_option.check_io_it_id "
@@ -67,6 +67,7 @@ def lambda_handler(event, context):
 
         io_info['io_price'] = row[17]
         io_info['io_discontinued'] = row[18]
+        io_info['delivery_seller_no'] = row[19]
         io_info['delv_date'] = ''
         if row[21]:
             io_info['delv_date'] = str(row[21])
