@@ -24,7 +24,6 @@ def lambda_handler(event, context):
     connection.commit()
     mb_info = cursor.fetchone()
     row_count = cursor.rowcount
-    tot_price = 0
     if row_count == 0:
         connection.close()
         return {
@@ -47,7 +46,7 @@ def lambda_handler(event, context):
                 stock_info = cursor.fetchone()
                 idx = stock_info[0]
                 if idx:
-                    cursor.execute("update tbl_item_option_price_stock set stock=%s where idx=%s", (stock, idx))
+                    cursor.execute("update tbl_item_option_price_stock set stock=%s, last_modify=%s where idx=%s", (stock, nowDatetime, idx))
                     # else:
                     #     cursor.execute(
                     #         "insert into tbl_item_option_price_stock set stock=%s")
