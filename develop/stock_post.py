@@ -39,18 +39,20 @@ def lambda_handler(event, context):
             cursor.execute("select io_no from g5_shop_item_option where io_part_no=%s", io_part_no)
             connection.commit()
             opt_info = cursor.fetchone()
-            io_no = opt_info[0]
-            if io_part_no and stock and io_no:
-                cursor.execute("select idx from tbl_item_option_price_stock where mb_no=%s and io_no=%s", (mb_no, io_no))
-                connection.commit()
-                stock_info = cursor.fetchone()
-                idx = stock_info[0]
-                if idx:
-                    cursor.execute("update tbl_item_option_price_stock set stock=%s, last_modify=%s where idx=%s", (stock, nowDatetime, idx))
-                    # else:
-                    #     cursor.execute(
-                    #         "insert into tbl_item_option_price_stock set stock=%s")
+            opt_inset = cursor.rowcount
+            if opt_inset != 0:
+                io_no = opt_info[0]
+                if io_part_no and stock and io_no:
+                    cursor.execute("select idx from tbl_item_option_price_stock where mb_no=%s and io_no=%s", (mb_no, io_no))
                     connection.commit()
+                    stock_info = cursor.fetchone()
+                    idx = stock_info[0]
+                    if idx:
+                        cursor.execute("update tbl_item_option_price_stock set stock=%s where idx=%s", (stock, idx))
+                        # else:
+                        #     cursor.execute(
+                        #         "insert into tbl_item_option_price_stock set stock=%s")
+                        connection.commit()
         connection.close()
 
     return {

@@ -3,11 +3,27 @@ import json
 import pymysql
 
 def lambda_handler(event, context):
+    if 'member_id' not in event:
+        return {
+            'statusCode': 402,
+            'message': "parameter error"
+        }
+
+    mb_id = event['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
     io_part_no = event['io_part_no']
     connection = db_connect()
     cursor = connection.cursor()
+
+    cursor.execute("SELECT mb_no FROM g5_member WHERE mb_id ='" + mb_id + "' and mb_level = 5")
+    connection.commit()
+    mb_no = cursor.fetchone()
+    if mb_no is None:
+        return {
+            'statusCode': 202,
+            'message': "member_id is not exist"
+        }
 
     if type(io_part_no) is int:
         io_part_no = str(io_part_no)
@@ -29,10 +45,10 @@ def lambda_handler(event, context):
                    "                (SELECT * FROM   "
                    "                    (SELECT io_no AS stock_io_no, mb_no AS delivery_seller_no, sale_delivery, stock AS tot_stock, delivery_collect, delivery_price AS delivery_price1 FROM tbl_item_option_price_stock WHERE  stock != '' AND stock > 1) stock"
                    "                     LEFT JOIN (select mb_no as seller_mb_no, delv_date from tbl_member_seller) seller on seller.seller_mb_no=stock.delivery_seller_no"                                                                                                                                                                                                                                                                                                                           
-                   "                     LEFT JOIN (SELECT io_no AS check_io_no, it_id AS check_io_it_id, io_btob_lowest as check_btob_lowest FROM g5_shop_item_option WHERE  origin_io_no IS NULL and io_part_no='" + io_part_no + "' ) check_option ON check_option.check_io_no = stock.stock_io_no "
+                   "                     LEFT JOIN (SELECT io_no AS check_io_no, it_id AS check_io_it_id, io_btob_price as check_btob_lowest FROM g5_shop_item_option WHERE  origin_io_no IS NULL and io_part_no='" + io_part_no + "' ) check_option ON check_option.check_io_no = stock.stock_io_no "
                    "                     LEFT JOIN (SELECT it_id AS check_it_id, ca_id AS check_ca_id, it_performance_type FROM g5_shop_item WHERE  origin_it_id IS NULL) check_item ON check_item.check_it_id = check_option.check_io_it_id "
                    "                     LEFT JOIN (SELECT ca_id AS contract_ca_id, mb_no AS contract_mb_no, idx AS contract_idx FROM tbl_member_seller_item_contract WHERE  contract_status = '1' AND contract_start <= '" + nowDate + "' AND contract_end >= '" + nowDate + "') contract ON contract.contract_mb_no = stock.delivery_seller_no AND contract.contract_ca_id = check_item.check_ca_id "
-                   "                 WHERE  contract_idx IS NOT NULL and check_btob_lowest <= sale_delivery ORDER  BY sale_delivery DESC, delivery_price1 ASC, tot_stock DESC) stock GROUP BY stock.stock_io_no) AS delivery_price ON delivery_price.stock_io_no = opt.io_no /* 택배가격 */ "
+                   "                 WHERE  contract_idx IS NOT NULL and check_btob_lowest <= sale_delivery ORDER  BY sale_delivery DESC, tot_stock DESC) stock GROUP BY stock.stock_io_no) AS delivery_price ON delivery_price.stock_io_no = opt.io_no /* 택배가격 */ "
                    "WHERE  category.ca_id IS NOT NULL AND item.it_id IS NOT NULL")
 
     connection.commit()
@@ -44,6 +60,7 @@ def lambda_handler(event, context):
     # return_list = [{"io_size": x[0], "io_size_origin": x[1], "io_part_no": x[2], "io_pr": x[3], "io_max_weight": x[4], "io_speed": x[5], "io_car": x[6], "io_oe": x[7], "io_car_type": x[8], "io_tire_type": x[9], "io_factory_price": x[10], "io_maker": x[11], "it_name": x[12], "it_pattern": x[13], "it_season": x[14], "it_performance_type": x[15], "tot_stock": x[16], "io_price": x[17], "io_discontinued": x[18]} for x in rows]
     return_list = []
     io_info = {}
+    #todo 공장도 할인율 계산해서 io_sell_price에 리턴하기
     for row in rows:
         io_info['io_size'] = row[0]
         io_info['io_size_origin'] = row[1]
