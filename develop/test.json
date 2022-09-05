@@ -1,6 +1,6 @@
 {
   'address': {
-    'address_name': '서울 동작구 상도동 22-118',
+    "address_name": '서울 동작구 상도동 22-118',
     'b_code': '1159010200',
     'h_code': '1159054000',
     'main_address_no': '22',
