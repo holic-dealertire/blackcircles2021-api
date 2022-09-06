@@ -12,6 +12,7 @@ import schedule
 import traceback
 import datetime
 
+
 # 과제 1.OOO 팝업제어
 # 과제 2.OOO 사이트 로그인 전에 대기되도록 webdriver wait 기능 구현
 # 과제 3.OOO 프로그램 돌아가던 중에 로그아웃 처리가 되면 텔레그램 메시지 전송되도록 구현
@@ -127,7 +128,7 @@ def get_stock_info(n=0):
             'x-api-key': '0BeUTq2fpUeTCEIl7O4f7gpHk92gfvd7SuvVrUsj'
         }
         datas = {
-            "mb_id": "3428601436",
+            "mb_id": "4598701838",  # 여기 회원 아이디
             "datas": data}
         # print(datas)
         print(datetime.datetime.now())
