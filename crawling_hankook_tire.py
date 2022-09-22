@@ -11,6 +11,7 @@ import requests
 import schedule
 import traceback
 import datetime
+import json
 
 
 # 과제 1.OOO 팝업제어
@@ -38,6 +39,7 @@ def get_stock_info(n=0):
             elif '세션이 만료 되었습니다.' in da.text:
                 # 텔레그램 메시지
                 da.accept()
+                post_to_slack("한국타이어 매크로\n 뉴일산타이어 - 세션만료, 재 로그인 필요")
                 print('#세션완료입니다. 재 로그인 해주세요.')
                 quit()
             else:
@@ -51,6 +53,7 @@ def get_stock_info(n=0):
                 print(log)
                 quit()
             else:
+                post_to_slack("한국타이어 매크로\n 뉴일산타이어 - 창이 꺼진 오류 발생")
                 print('창이 꺼진 오류입니다. 오류메시지', e)
 
         # 조회 버튼 누르기 + 0807 수정 send_keys error 수정 -> Keys.ENTER 로 바꾸기
@@ -137,7 +140,7 @@ def get_stock_info(n=0):
         print(r.status_code)
     except Exception as e:
         print(datetime.datetime.now())
-        print('추출함수 실행중 발생한 오류입니다. 오류메시지:', e)
+        post_to_slack("한국타이어 매크로\n 뉴일산타이어 - 추출함수 오류")
         log = traceback.format_exc()
         print(log)
         # 텔레그램 메시지 보내기
@@ -212,3 +215,23 @@ except Exception as e:
     print('반복 추출함수 실행도중 발생한 오류입니다. 오류메시지:', e)
     log = traceback.format_exc()
     print(log)
+
+
+def post_to_slack(message):
+    message = [{"type": "section", "text":
+        {
+            "type": "mrkdwn",
+            "text": message
+        }
+                }]
+    webhook_url = 'https://hooks.slack.com/services/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'
+    slack_data = json.dumps({'blocks': message})
+    response = requests.post(
+        webhook_url, data=slack_data,
+        headers={'Content-Type': 'application/json'}
+    )
+    if response.status_code != 200:
+        raise ValueError(
+            'Request to slack returned an error %s, the response is:\n%s'
+            % (response.status_code, response.text)
+        )
