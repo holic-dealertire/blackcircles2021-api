@@ -136,6 +136,7 @@ def get_stock_info(n=0):
         print(r.text)
         print(r.status_code)
     except Exception as e:
+        print(datetime.datetime.now())
         print('추출함수 실행중 발생한 오류입니다. 오류메시지:', e)
         log = traceback.format_exc()
         print(log)
