@@ -1,747 +1,951 @@
 {
-  "swagger" : "2.0",
-  "info" : {
-    "description" : "이 문서는 REST API를 사용한 블랙서클 API 사용법에 대하여 안내합니다. 일부 한정된 기능을 제공하는 버전입니다.\n***모든 request에는 발급받은 x-api-key를 header에 포함하고, 아이디를 body에 포함해서 보내주시면 됩니다.",
-    "version" : "1.1.0",
-    "title" : "Blackcircles-REST API",
-    "contact" : {
-      "email" : "holic@dealertire.kr"
+  "swagger": "2.0",
+  "info": {
+    "description": "이 문서는 REST API를 사용한 블랙서클 API 사용법에 대하여 안내합니다. 일부 한정된 기능을 제공하는 버전입니다.\n***모든 request에는 발급받은 x-api-key를 header에 포함하고, 아이디를 body에 포함해서 보내주시면 됩니다.",
+    "version": "1.1.0",
+    "title": "Blackcircles-REST API",
+    "contact": {
+      "email": "holic@dealertire.kr"
     }
   },
-  "tags" : [ {
-    "name" : "item",
-    "description" : "상품에 대한 가격 정보"
-  }, {
-    "name" : "order",
-    "description" : "Access to blackcircles orders"
-  } ],
-  "paths" : {
-    "/item" : {
-      "get" : {
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "success, return the array of item",
-            "schema" : {
-              "$ref" : "#/definitions/items"
+  "tags": [
+    {
+      "name": "item",
+      "description": "상품에 대한 가격 정보"
+    },
+    {
+      "name": "order",
+      "description": "Access to blackcircles orders"
+    }
+  ],
+  "paths": {
+    "/item": {
+      "get": {
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success, return the array of item",
+            "schema": {
+              "$ref": "#/definitions/items"
             }
           },
-          "401" : {
-            "description" : "Invalid API key"
+          "401": {
+            "description": "Invalid API key"
           }
         },
-        "tags" : [ "item" ],
-        "summary" : "공급 상품 리스트"
+        "tags": [
+          "item"
+        ],
+        "summary": "공급 상품 리스트"
       }
     },
-    "/item/{io_part_no}" : {
-      "get" : {
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "io_part_no",
-          "in" : "path",
-          "description" : "item.io_part_no",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "success",
-            "schema" : {
-              "$ref" : "#/definitions/items"
+    "/item/{io_part_no}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "io_part_no",
+            "in": "path",
+            "description": "item.io_part_no",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/item_match"
             }
           },
-          "201" : {
-            "description" : "no stock"
+          "201": {
+            "description": "no stock"
           },
-          "202" : {
-            "description" : "io_part_no is not exist"
+          "202": {
+            "description": "io_part_no is not exist"
           },
-          "401" : {
-            "description" : "Invalid API key"
+          "401": {
+            "description": "Invalid API key"
           }
         },
-        "tags" : [ "item" ]
+        "tags": [
+          "item"
+        ]
       }
     },
-    "/items" : {
-      "get" : {
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "success, return the array of item",
-            "schema" : {
-              "$ref" : "#/definitions/items"
+    "/items": {
+      "get": {
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success, return the array of item",
+            "schema": {
+              "$ref": "#/definitions/item"
             }
           },
-          "401" : {
-            "description" : "Invalid API key"
+          "401": {
+            "description": "Invalid API key"
           }
         },
-        "tags" : [ "item" ],
-        "summary" : "재고보유한 공급 상품 리스트"
+        "tags": [
+          "item"
+        ],
+        "summary": "재고보유한 공급 상품 리스트"
       }
     },
-    "/order" : {
-      "post" : {
-        "operationId" : "order",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "in" : "body",
-          "name" : "body",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/order"
+    "/order": {
+      "post": {
+        "operationId": "order",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/order"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful",
-            "schema" : {
-              "$ref" : "#/definitions/OrderRequest"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
             }
           },
-          "201" : {
-            "description" : "od_id is already exist"
+          "201": {
+            "description": "od_id is already exist"
           },
-          "401" : {
-            "description" : "Invalid API key"
+          "401": {
+            "description": "Invalid API key"
           },
-          "402" : {
-            "description" : "parameter error"
+          "402": {
+            "description": "parameter error"
           },
-          "405" : {
-            "description" : "not enough stock"
+          "405": {
+            "description": "not enough stock"
           }
         },
-        "tags" : [ "order" ],
-        "summary" : "주문 생성"
+        "tags": [
+          "order"
+        ],
+        "summary": "주문 생성"
       }
     },
-    "/order/{od_id}" : {
-      "get" : {
-        "summary" : "주문 조회",
-        "description" : "주문 조회",
-        "operationId" : "getOrderById",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "od_id",
-          "in" : "path",
-          "description" : "주문번호",
-          "required" : true,
-          "type" : "integer"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful",
-            "schema" : {
-              "$ref" : "#/definitions/OrderResponse"
+    "/order/{od_id}": {
+      "get": {
+        "summary": "주문 조회",
+        "description": "주문 조회",
+        "operationId": "getOrderById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "od_id",
+            "in": "path",
+            "description": "주문번호",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/OrderResponse"
             }
           },
-          "400" : {
-            "description" : "Order not found"
+          "400": {
+            "description": "Order not found"
           },
-          "401" : {
-            "description" : "Invalid API key"
+          "401": {
+            "description": "Invalid API key"
           }
         },
-        "tags" : [ "order" ]
+        "tags": [
+          "order"
+        ]
       },
-      "delete" : {
-        "summary" : "주문 취소",
-        "description" : "주문취소 요청입니다.",
-        "operationId" : "od_id",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "in" : "body",
-          "name" : "body",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/OrderRefundRequest"
+      "delete": {
+        "summary": "주문 취소",
+        "description": "주문취소 요청입니다.",
+        "operationId": "od_id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderRefundRequest"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "정상주문취소",
-            "schema" : {
-              "$ref" : "#/definitions/OrderRefundResponse"
+        ],
+        "responses": {
+          "200": {
+            "description": "정상주문취소",
+            "schema": {
+              "$ref": "#/definitions/OrderRefundResponse"
             }
           },
-          "202" : {
-            "description" : "io_part_no is not exist"
+          "202": {
+            "description": "io_part_no is not exist"
           },
-          "210" : {
-            "description" : "취소요청완료 - 확인이 필요한 주문취소(내부 매니저가 확인 후 처리합니다)"
+          "210": {
+            "description": "취소요청완료 - 확인이 필요한 주문취소(내부 매니저가 확인 후 처리합니다)"
           },
-          "400" : {
-            "description" : "order not found"
+          "400": {
+            "description": "order not found"
           },
-          "401" : {
-            "description" : "Invalid api key"
+          "401": {
+            "description": "Invalid api key"
           },
-          "402" : {
-            "description" : "parameter error"
+          "402": {
+            "description": "parameter error"
           },
-          "403" : {
-            "description" : "취소할 수 없는 주문"
+          "403": {
+            "description": "취소할 수 없는 주문"
           },
-          "404" : {
-            "description" : "이미 동일한 요청으로 변경된 주문"
+          "404": {
+            "description": "이미 동일한 요청으로 변경된 주문"
           }
         },
-        "tags" : [ "order" ]
+        "tags": [
+          "order"
+        ]
       },
-      "put" : {
-        "summary" : "주문 수정",
-        "description" : "배송지변경 or 배송상태변경",
-        "operationId" : "od_id",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "x-api-key",
-          "in" : "header",
-          "description" : "X-API-KEY",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "member_id",
-          "in" : "path",
-          "description" : "발급받은 회원아이디",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "in" : "body",
-          "name" : "body",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/OrderStatus"
+      "put": {
+        "summary": "주문 수정",
+        "description": "배송지변경 or 배송상태변경",
+        "operationId": "od_id",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderStatus"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful",
-            "schema" : {
-              "$ref" : "#/definitions/OrderRequest"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
             }
           },
-          "400" : {
-            "description" : "order not found"
+          "400": {
+            "description": "order not found"
           },
-          "401" : {
-            "description" : "invalid api key"
+          "401": {
+            "description": "invalid api key"
           },
-          "402" : {
-            "description" : "parameter error"
+          "402": {
+            "description": "parameter error"
           }
         },
-        "tags" : [ "order" ]
+        "tags": [
+          "order"
+        ]
       }
     }
   },
-  "definitions" : {
-    "items" : {
-      "type" : "object",
-      "properties" : {
-        "statusCode" : {
-          "type" : "integer",
-          "format" : "int32"
+  "definitions": {
+    "items": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
         },
-        "message" : {
-          "type" : "string"
+        "message": {
+          "type": "string"
         },
-        "data" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/item"
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/item"
           }
         }
       }
     },
-    "order" : {
-      "type" : "object",
-      "properties" : {
-        "od_id" : {
-          "type" : "integer",
-          "description" : "주문번호",
-          "example" : "2021030809354892"
+    "order": {
+      "type": "object",
+      "properties": {
+        "od_id": {
+          "type": "integer",
+          "description": "주문번호(자동생성되지 않습니다. 임의의 숫자로 생성해서 보내주세요)",
+          "example": "2021030809354892"
         },
-        "od_name" : {
-          "type" : "string",
-          "description" : "받는분 성함",
-          "example" : "블랙서클 강남점"
+        "od_name": {
+          "type": "string",
+          "description": "받는분 성함",
+          "example": "블랙서클 강남점"
         },
-        "od_tel" : {
-          "type" : "string",
-          "description" : "받는분 연락처",
-          "example" : "010-1234-5678"
+        "od_tel": {
+          "type": "string",
+          "description": "받는분 연락처",
+          "example": "010-1234-5678"
         },
-        "od_addr1" : {
-          "type" : "string",
-          "description" : "받는분 주소(도로명)",
-          "example" : "서울 강남구 강남대로 238-3"
+        "od_addr1": {
+          "type": "string",
+          "description": "받는분 주소(도로명)",
+          "example": "서울 강남구 강남대로 238-3"
         },
-        "od_addr2" : {
-          "type" : "string",
-          "description" : "받는분 주소(상세주소)",
-          "example" : "블랙서클타이어 대리점"
+        "od_addr2": {
+          "type": "string",
+          "description": "받는분 주소(상세주소)",
+          "example": "블랙서클타이어 대리점"
         },
-        "od_addr3" : {
-          "type" : "string",
-          "description" : "받는분 주소(참고항목)",
-          "example" : "(오금동)"
+        "od_addr3": {
+          "type": "string",
+          "description": "받는분 주소(참고항목)",
+          "example": "(오금동)"
         },
-        "od_reserv_date" : {
-          "type" : "string",
-          "description" : "예약일(format date)",
-          "example" : "2021-10-14"
+        "od_reserv_date": {
+          "type": "string",
+          "description": "예약일(format date)",
+          "example": "2021-10-14"
         },
-        "cart_item" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/CartItem"
+        "cart_item": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartItem"
           }
         }
       }
     },
-    "OrderRequest" : {
-      "type" : "object",
-      "properties" : {
-        "statusCode" : {
-          "type" : "integer",
-          "format" : "int32"
+    "OrderRequest": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
         },
-        "message" : {
-          "type" : "string"
+        "message": {
+          "type": "string"
         }
       }
     },
-    "OrderResponse" : {
-      "type" : "object",
-      "properties" : {
-        "statusCode" : {
-          "type" : "integer",
-          "format" : "int32"
+    "OrderResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
         },
-        "message" : {
-          "type" : "string"
+        "message": {
+          "type": "string"
         },
-        "data" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/OrderInfo"
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderInfo"
           }
         }
       }
     },
-    "OrderInfo" : {
-      "type" : "object",
-      "properties" : {
-        "od_name" : {
-          "type" : "string",
-          "description" : "받는분 성함",
-          "example" : "블랙서클타이어 대리점"
+    "OrderInfo": {
+      "type": "object",
+      "properties": {
+        "od_name": {
+          "type": "string",
+          "description": "받는분 성함",
+          "example": "블랙서클타이어 대리점"
         },
-        "od_tel" : {
-          "type" : "string",
-          "description" : "받는분 연락처",
-          "example" : "010-1234-5678"
+        "od_tel": {
+          "type": "string",
+          "description": "받는분 연락처",
+          "example": "010-1234-5678"
         },
-        "od_addr1" : {
-          "type" : "string",
-          "description" : "받는분 주소(도로명)",
-          "example" : "서울 강남구 강남대로 238-3"
+        "od_addr1": {
+          "type": "string",
+          "description": "받는분 주소(도로명)",
+          "example": "서울 강남구 강남대로 238-3"
         },
-        "od_addr2" : {
-          "type" : "string",
-          "description" : "받는분 주소(상세주소)",
-          "example" : "블랙서클타이어 대리점"
+        "od_addr2": {
+          "type": "string",
+          "description": "받는분 주소(상세주소)",
+          "example": "블랙서클타이어 대리점"
         },
-        "od_addr3" : {
-          "type" : "string",
-          "description" : "받는분 주소(참고항목)",
-          "example" : "(오금동)"
+        "od_addr3": {
+          "type": "string",
+          "description": "받는분 주소(참고항목)",
+          "example": "(오금동)"
         },
-        "od_time" : {
-          "type" : "string",
-          "description" : "format datetime",
-          "example" : "2021-09-10 10:34:33"
+        "od_time": {
+          "type": "string",
+          "description": "format datetime",
+          "example": "2021-09-10 10:34:33"
         },
-        "cart_item" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/CartDeliveryInfo"
+        "cart_item": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartDeliveryInfo"
           }
         }
       }
     },
-    "OrderRefundRequest" : {
-      "type" : "object",
-      "properties" : {
-        "od_id" : {
-          "type" : "integer",
-          "description" : "주문번호",
-          "example" : "2021030809354892"
+    "OrderRefundRequest": {
+      "type": "object",
+      "properties": {
+        "od_id": {
+          "type": "integer",
+          "description": "주문번호",
+          "example": "2021030809354892"
         },
-        "refund_request" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/CartRefundInfo"
+        "refund_request": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartRefundInfo"
           }
         }
       }
     },
-    "OrderRefundResponse" : {
-      "type" : "object",
-      "properties" : {
-        "statusCode" : {
-          "type" : "integer",
-          "format" : "int32"
+    "OrderRefundResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
         },
-        "message" : {
-          "type" : "string"
+        "message": {
+          "type": "string"
         }
       }
     },
-    "CartItem" : {
-      "type" : "object",
-      "properties" : {
-        "io_part_no" : {
-          "type" : "string",
-          "description" : "part number",
-          "example" : "1016011"
+    "CartItem": {
+      "type": "object",
+      "properties": {
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
         },
-        "ct_qty" : {
-          "type" : "integer",
-          "description" : "수량",
-          "example" : "2"
+        "seller_no": {
+          "type": "integer",
+          "description": "판매자번호",
+          "example": "128"
         },
-        "ct_sale" : {
-          "type" : "integer",
-          "description" : "할인율",
-          "example" : "40"
+        "ct_qty": {
+          "type": "integer",
+          "description": "구매수량",
+          "example": "2"
         },
-        "it_sc_price" : {
-          "type" : "integer",
-          "description" : "해당 상품의 배송비 합계",
-          "example" : "11000"
+        "ct_sale": {
+          "type": "integer",
+          "description": "할인율",
+          "example": "40"
+        },
+        "it_sc_price": {
+          "type": "integer",
+          "description": "해당 상품의 배송비 합계",
+          "example": "11000"
         }
       }
     },
-    "CartDeliveryInfo" : {
-      "type" : "object",
-      "properties" : {
-        "io_part_no" : {
-          "type" : "string",
-          "description" : "part number",
-          "example" : "1016011"
+    "CartDeliveryInfo": {
+      "type": "object",
+      "properties": {
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
         },
-        "ct_qty" : {
-          "type" : "integer",
-          "description" : "수량",
-          "example" : "2"
+        "ct_qty": {
+          "type": "integer",
+          "description": "수량",
+          "example": "2"
         },
-        "ct_status" : {
-          "type" : "string",
-          "description" : "주문상태",
-          "enum" : [ "입금", "준비", "배송", "완료", "취소요청", "취소", "확정" ],
-          "example" : "입금"
+        "ct_status": {
+          "type": "string",
+          "description": "주문상태",
+          "enum": [
+            "입금",
+            "준비",
+            "배송",
+            "완료",
+            "취소요청",
+            "취소",
+            "확정"
+          ],
+          "example": "입금"
         },
-        "delivery_company" : {
-          "type" : "string",
-          "description" : "배송회사",
-          "example" : "경동택배"
+        "delivery_company": {
+          "type": "string",
+          "description": "배송회사",
+          "example": "경동택배"
         },
-        "ct_invoice" : {
-          "type" : "string",
-          "description" : "송장번호",
-          "example" : "5305091110558"
+        "ct_invoice": {
+          "type": "string",
+          "description": "송장번호",
+          "example": "5305091110558"
         },
-        "ct_invoice_time" : {
-          "type" : "string",
-          "description" : "배송시작일시(format datetime)",
-          "example" : "2021-09-10 10:34:33"
+        "ct_invoice_time": {
+          "type": "string",
+          "description": "배송시작일시(format datetime)",
+          "example": "2021-09-10 10:34:33"
         },
-        "ct_complete_time" : {
-          "type" : "string",
-          "description" : "배송완료일시(format datetime)",
-          "example" : "2021-09-10 10:34:33"
+        "ct_complete_time": {
+          "type": "string",
+          "description": "배송완료일시(format datetime)",
+          "example": "2021-09-10 10:34:33"
         },
-        "ct_confirm_time" : {
-          "type" : "string",
-          "description" : "구매확정일시(format datetime)",
-          "example" : "2021-09-10 10:34:33"
+        "ct_confirm_time": {
+          "type": "string",
+          "description": "구매확정일시(format datetime)",
+          "example": "2021-09-10 10:34:33"
         }
       }
     },
-    "CartRefundInfo" : {
-      "type" : "object",
-      "properties" : {
-        "io_part_no" : {
-          "type" : "string",
-          "description" : "part number",
-          "example" : "1016011"
+    "CartRefundInfo": {
+      "type": "object",
+      "properties": {
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
         },
-        "refund_reason" : {
-          "type" : "string",
-          "description" : "취소(환불) 사유",
-          "example" : "고객단순변심"
+        "refund_reason": {
+          "type": "string",
+          "description": "취소(환불) 사유",
+          "example": "고객단순변심"
         },
-        "ct_cancel_req_time" : {
-          "type" : "string",
-          "description" : "취소요청시간(format datetime)",
-          "example" : "2021-09-10 10:34:33"
+        "ct_cancel_req_time": {
+          "type": "string",
+          "description": "취소요청시간(format datetime)",
+          "example": "2021-09-10 10:34:33"
         }
       }
     },
-    "OrderStatus" : {
-      "type" : "object",
-      "properties" : {
-        "od_id" : {
-          "type" : "integer",
-          "description" : "주문번호",
-          "example" : "2021030809354892"
+    "OrderStatus": {
+      "type": "object",
+      "properties": {
+        "od_id": {
+          "type": "integer",
+          "description": "주문번호",
+          "example": "2021030809354892"
         },
-        "od_name" : {
-          "type" : "string",
-          "description" : "받는분 성함",
-          "example" : "블랙서클타이어 대리점"
+        "od_name": {
+          "type": "string",
+          "description": "받는분 성함",
+          "example": "블랙서클타이어 대리점"
         },
-        "od_tel" : {
-          "type" : "string",
-          "description" : "받는분 연락처",
-          "example" : "010-1234-5678"
+        "od_tel": {
+          "type": "string",
+          "description": "받는분 연락처",
+          "example": "010-1234-5678"
         },
-        "od_addr1" : {
-          "type" : "string",
-          "description" : "받는분 주소(도로명)",
-          "example" : "서울 강남구 강남대로 238-3"
+        "od_addr1": {
+          "type": "string",
+          "description": "받는분 주소(도로명)",
+          "example": "서울 강남구 강남대로 238-3"
         },
-        "od_addr2" : {
-          "type" : "string",
-          "description" : "받는분 주소(상세주소)",
-          "example" : "블랙서클타이어 대리점"
+        "od_addr2": {
+          "type": "string",
+          "description": "받는분 주소(상세주소)",
+          "example": "블랙서클타이어 대리점"
         },
-        "od_addr3" : {
-          "type" : "string",
-          "description" : "받는분 주소(참고항목)",
-          "example" : "(오금동)"
+        "od_addr3": {
+          "type": "string",
+          "description": "받는분 주소(참고항목)",
+          "example": "(오금동)"
         },
-        "od_reserv_date" : {
-          "type" : "string",
-          "description" : "예약일(format date)",
-          "example" : "2021-10-14"
+        "od_reserv_date": {
+          "type": "string",
+          "description": "예약일(format date)",
+          "example": "2021-10-14"
         },
-        "cart_status" : {
-          "type" : "array",
-          "items" : {
-            "$ref" : "#/definitions/CartStatus"
+        "cart_status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartStatus"
           }
         }
       }
     },
-    "CartStatus" : {
-      "type" : "object",
-      "properties" : {
-        "io_part_no" : {
-          "type" : "string",
-          "description" : "part number",
-          "example" : "1016011"
+    "CartStatus": {
+      "type": "object",
+      "properties": {
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
         },
-        "ct_status" : {
-          "type" : "string",
-          "description" : "주문상태",
-          "enum" : [ "입금", "준비", "배송", "완료", "취소요청", "취소", "확정" ],
-          "example" : "입금"
+        "ct_status": {
+          "type": "string",
+          "description": "주문상태",
+          "enum": [
+            "입금",
+            "준비",
+            "배송",
+            "완료",
+            "취소요청",
+            "취소",
+            "확정"
+          ],
+          "example": "입금"
         }
       }
     },
-    "item" : {
-      "type" : "object",
-      "properties" : {
-        "io_size" : {
-          "type" : "integer",
-          "description" : "사이즈(숫자)",
-          "example" : "2454517"
+    "item": {
+      "type": "object",
+      "properties": {
+        "io_size": {
+          "type": "integer",
+          "description": "사이즈(숫자)",
+          "example": "2454517"
         },
-        "io_size_origin" : {
-          "type" : "string",
-          "description" : "사이즈",
-          "example" : "245/45R17"
+        "io_size_origin": {
+          "type": "string",
+          "description": "사이즈",
+          "example": "245/45R17"
         },
-        "io_part_no" : {
-          "type" : "string",
-          "description" : "part number",
-          "example" : "1016011"
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
         },
-        "io_pr" : {
-          "type" : "string",
-          "description" : "PR",
-          "example" : "4P"
+        "io_pr": {
+          "type": "string",
+          "description": "PR",
+          "example": "4P"
         },
-        "io_max_weight" : {
-          "type" : "string",
-          "description" : "최대하중",
-          "example" : "95"
+        "io_max_weight": {
+          "type": "string",
+          "description": "최대하중",
+          "example": "95"
         },
-        "io_speed" : {
-          "type" : "string",
-          "description" : "속도",
-          "example" : "W"
+        "io_speed": {
+          "type": "string",
+          "description": "속도",
+          "example": "W"
         },
-        "io_car" : {
-          "type" : "string",
-          "description" : "차량",
-          "example" : "C클래스"
+        "io_car": {
+          "type": "string",
+          "description": "차량",
+          "example": "C클래스"
         },
-        "io_oe" : {
-          "type" : "string",
-          "description" : "OE",
-          "example" : "MO"
+        "io_oe": {
+          "type": "string",
+          "description": "OE",
+          "example": "MO"
         },
-        "io_car_type" : {
-          "type" : "string",
-          "description" : "차량 type",
-          "example" : "승용세단"
+        "io_car_type": {
+          "type": "string",
+          "description": "차량 type",
+          "example": "승용세단"
         },
-        "io_tire_type" : {
-          "type" : "string",
-          "description" : "타이어 type",
-          "example" : "런플랫"
+        "io_tire_type": {
+          "type": "string",
+          "description": "타이어 type",
+          "example": "런플랫"
         },
-        "io_factory_price" : {
-          "type" : "integer",
-          "description" : "공장도가격",
-          "example" : "236500"
+        "io_factory_price": {
+          "type": "integer",
+          "description": "공장도가격",
+          "example": "236500"
         },
-        "io_maker" : {
-          "type" : "string",
-          "description" : "원산지",
-          "example" : "헝가리"
+        "io_maker": {
+          "type": "string",
+          "description": "원산지",
+          "example": "헝가리"
         },
-        "it_name" : {
-          "type" : "string",
-          "description" : "상품명",
-          "example" : "벤투스 S1 에보2 K117"
+        "it_name": {
+          "type": "string",
+          "description": "상품명",
+          "example": "벤투스 S1 에보2 K117"
         },
-        "it_pattern" : {
-          "type" : "string",
-          "description" : "패턴",
-          "example" : "K117"
+        "it_pattern": {
+          "type": "string",
+          "description": "패턴",
+          "example": "K117"
         },
-        "it_season" : {
-          "type" : "string",
-          "description" : "계절",
-          "example" : "여름용"
+        "it_season": {
+          "type": "string",
+          "description": "계절",
+          "example": "여름용"
         },
-        "it_performance_type" : {
-          "type" : "string",
-          "description" : "성능 type",
-          "example" : "프리미엄 스포츠"
+        "it_performance_type": {
+          "type": "string",
+          "description": "성능 type",
+          "example": "프리미엄 스포츠"
         },
-        "tot_stock" : {
-          "type" : "integer",
-          "description" : "총 재고",
-          "example" : "100"
+        "tot_stock": {
+          "type": "integer",
+          "description": "총 재고",
+          "example": "100"
         },
-        "io_price" : {
-          "type" : "integer",
-          "description" : "판매가(변동)",
-          "example" : "200000"
+        "io_price": {
+          "type": "integer",
+          "description": "판매가(변동)",
+          "example": "200000"
         },
-        "io_sale" : {
-          "type" : "integer",
-          "description" : "할인율(변동)",
-          "example" : "40"
+        "io_sale": {
+          "type": "integer",
+          "description": "할인율(변동)",
+          "example": "40"
         },
-        "io_delivery_price" : {
-          "type" : "integer",
-          "description" : "배송비",
-          "example" : "5500"
+        "io_delivery_price": {
+          "type": "integer",
+          "description": "배송비",
+          "example": "5500"
         },
-        "delv_date" : {
-          "type" : "string",
-          "description" : "배송도착 예정일(format data)",
-          "example" : "2021-10-14"
+        "delv_date": {
+          "type": "string",
+          "description": "배송도착 예정일(format data)",
+          "example": "2021-10-14"
         },
-        "io_discontinued" : {
-          "type" : "string",
-          "description" : "단종여부 (1:단종)",
-          "example" : "0 or 1"
+        "io_discontinued": {
+          "type": "string",
+          "description": "단종여부 (1:단종)",
+          "example": "0 or 1"
+        },
+        "ca_name": {
+          "type": "string",
+          "description": "브랜드(카테고리)",
+          "example": "한국 or 금호 or etc"
+        }
+      }
+    },
+    "item_match": {
+      "type": "object",
+      "properties": {
+        "io_size": {
+          "type": "integer",
+          "description": "사이즈(숫자)",
+          "example": "2454517"
+        },
+        "io_size_origin": {
+          "type": "string",
+          "description": "사이즈",
+          "example": "245/45R17"
+        },
+        "io_part_no": {
+          "type": "string",
+          "description": "part number",
+          "example": "1016011"
+        },
+        "io_pr": {
+          "type": "string",
+          "description": "PR",
+          "example": "4P"
+        },
+        "io_max_weight": {
+          "type": "string",
+          "description": "최대하중",
+          "example": "95"
+        },
+        "io_speed": {
+          "type": "string",
+          "description": "속도",
+          "example": "W"
+        },
+        "io_car": {
+          "type": "string",
+          "description": "차량",
+          "example": "C클래스"
+        },
+        "io_oe": {
+          "type": "string",
+          "description": "OE",
+          "example": "MO"
+        },
+        "io_car_type": {
+          "type": "string",
+          "description": "차량 type",
+          "example": "승용세단"
+        },
+        "io_tire_type": {
+          "type": "string",
+          "description": "타이어 type",
+          "example": "런플랫"
+        },
+        "io_factory_price": {
+          "type": "integer",
+          "description": "공장도가격",
+          "example": "236500"
+        },
+        "io_maker": {
+          "type": "string",
+          "description": "원산지",
+          "example": "헝가리"
+        },
+        "it_name": {
+          "type": "string",
+          "description": "상품명",
+          "example": "벤투스 S1 에보2 K117"
+        },
+        "it_pattern": {
+          "type": "string",
+          "description": "패턴",
+          "example": "K117"
+        },
+        "it_season": {
+          "type": "string",
+          "description": "계절",
+          "example": "여름용"
+        },
+        "it_performance_type": {
+          "type": "string",
+          "description": "성능 type",
+          "example": "프리미엄 스포츠"
+        },
+        "seller_no": {
+          "type": "integer",
+          "description": "매칭된 판매자번호",
+          "example": "128"
+        },
+        "stock": {
+          "type": "integer",
+          "description": "매칭된 재고",
+          "example": "100"
+        },
+        "io_price": {
+          "type": "integer",
+          "description": "매칭된 판매가",
+          "example": "200000"
+        },
+        "io_sale": {
+          "type": "integer",
+          "description": "매칭된 할인율",
+          "example": "40"
+        },
+        "io_delivery_price": {
+          "type": "integer",
+          "description": "매칭된 배송비",
+          "example": "5500"
+        },
+        "delv_date": {
+          "type": "string",
+          "description": "배송도착 예정일(format data)",
+          "example": "2021-10-14"
+        },
+        "io_discontinued": {
+          "type": "string",
+          "description": "단종여부 (1:단종)",
+          "example": "0 or 1"
+        },
+        "ca_name": {
+          "type": "string",
+          "description": "브랜드(카테고리)",
+          "example": "한국 or 금호 or etc"
         }
       }
     }
   },
-  "schemes" : [ "https" ],
-  "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/bc20/blackcircles2021/1.1.0"
+  "schemes": [
+    "https"
+  ],
+  "host": "test.blackcircles.co.kr",
+  "basePath": "/"
 }
