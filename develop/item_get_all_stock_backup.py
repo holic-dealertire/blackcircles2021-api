@@ -1,7 +1,7 @@
 import datetime
 import json
 import pymysql
-from decimal import Decimal
+
 
 def lambda_handler(event, context):
     if 'member_id' not in event:

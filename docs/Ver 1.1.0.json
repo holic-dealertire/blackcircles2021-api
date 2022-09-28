@@ -800,11 +800,6 @@
           "description": "배송비",
           "example": "5500"
         },
-        "delv_date": {
-          "type": "string",
-          "description": "배송도착 예정일(format data)",
-          "example": "2021-10-14"
-        },
         "io_discontinued": {
           "type": "string",
           "description": "단종여부 (1:단종)",

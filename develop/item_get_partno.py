@@ -13,14 +13,21 @@ def lambda_handler(event, context):
     connection = db_connect()
     cursor = connection.cursor()
 
-    cursor.execute("SELECT mb_no FROM g5_member WHERE mb_id ='" + mb_id + "' and mb_level = 5")
+    cursor.execute("select retail_type from (SELECT mb_no FROM g5_member WHERE mb_id ='" + mb_id + "' and mb_level = 5 and mb_14 = 1) member left join (select mb_no as retail_mb_no, retail_type from tbl_member_retail) retail on retail.retail_mb_no=member.mb_no")
     connection.commit()
-    mb_no = cursor.fetchone()
-    if mb_no is None:
+    retail_type = cursor.fetchone()
+    if retail_type is None:
         return {
             'statusCode': 202,
             'message': "member_id is not exist"
         }
+
+    if retail_type == 2:
+        retail_type = 'io_sell_price_premium'
+    elif retail_type == 4:
+        retail_type = 'io_btob_price'
+    else:
+        retail_type = 'io_sell_price_basic'
 
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
