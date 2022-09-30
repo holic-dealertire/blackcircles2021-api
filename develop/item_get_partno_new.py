@@ -238,7 +238,7 @@ def lambda_handler(event, context):
         io_info['it_pattern'] = str(row[13])
         io_info['it_season'] = str(row[14])
         io_info['it_performance_type'] = str(row[15])
-        io_info['tot_stock'] = int(row[16])
+        io_info['tot_stock'] = int(row[16]) #todo 여기 판매자가 보유한 재고로 리턴해줘야됨
         io_info['io_price'] = int(io_price)
         io_info['io_sale'] = row[17]
         io_info['io_delivery_price'] = row[19]
