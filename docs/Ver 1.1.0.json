@@ -31,7 +31,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
@@ -66,17 +66,24 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
           },
           {
             "name": "io_part_no",
-            "in": "path",
+            "in": "query",
             "description": "item.io_part_no",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "qty",
+            "in": "query",
+            "description": "구매수량",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -113,7 +120,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
@@ -152,7 +159,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
@@ -210,7 +217,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
@@ -258,7 +265,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
@@ -322,7 +329,7 @@
           },
           {
             "name": "member_id",
-            "in": "path",
+            "in": "query",
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
