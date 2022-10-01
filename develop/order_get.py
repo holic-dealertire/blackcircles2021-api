@@ -4,8 +4,14 @@ import pymysql
 
 
 def lambda_handler(event, context):
-    now = datetime.datetime.now()
-    nowDate = now.strftime('%Y-%m-%d')
+    if 'member_id' not in event:
+        return {
+            'statusCode': 402,
+            'message': "parameter error",
+            "data": json.dumps(event)
+        }
+
+    mb_id = event['member_id']
 
     if 'od_id' not in event:
         return {
@@ -21,6 +27,16 @@ def lambda_handler(event, context):
     if od_id:
         connection = db_connect()
         cursor = connection.cursor()
+
+        cursor.execute("select retail_type from (SELECT mb_no FROM g5_member WHERE mb_id ='" + mb_id + "' and mb_level = 5 and mb_14 = 1) member left join (select mb_no as retail_mb_no, retail_type from tbl_member_retail) retail on retail.retail_mb_no=member.mb_no")
+        connection.commit()
+        retail_type = cursor.fetchone()
+        if retail_type is None:
+            return {
+                'statusCode': 202,
+                'message': "member_id is not exist"
+            }
+
         # 주문정보
         cursor.execute("select od_name, od_tel, concat(od_zip1, od_zip2) as od_zip, od_addr1, od_addr2, od_addr3, od_memo, od_receipt_price, od_time, od_reserv_date from g5_shop_order where od_id=%s", od_id)
         connection.commit()
@@ -34,13 +50,13 @@ def lambda_handler(event, context):
 
         # 장바구니
         cursor.execute("SELECT io_part_no, ct_qty, ct_status, ct_delivery_company, ct_invoice, ct_invoice_time, ct_complete_time, ct_confirm_time FROM "
-                       "    ( SELECT *, it_id AS ca_it_id, io_no AS cart_io_no FROM g5_shop_cart WHERE od_id = '" + od_id + "' AND ct_select = '1' AND ct_orderable = '1' AND mb_id = 'cardoc' ) cart "
+                       "    ( SELECT *, it_id AS ca_it_id, io_no AS cart_io_no FROM g5_shop_cart WHERE od_id = '" + od_id + "' AND ct_select = '1' AND ct_orderable = '1' AND mb_id = %s ) cart "
                        "    LEFT JOIN ( SELECT it_id, ca_id AS it_ca_id FROM g5_shop_item) item ON item.it_id = cart.ca_it_id "
                        "    LEFT JOIN ( SELECT io_no, io_size_origin, io_pr, io_max_weight, io_speed, io_car, io_oe, io_tire_type, io_factory_price, io_maker, io_car_type, origin_io_no, io_part_no FROM g5_shop_item_option) opt ON opt.io_no = cart.cart_io_no "
                        "    LEFT JOIN ( SELECT ca_id, ca_name FROM g5_shop_category WHERE  length(ca_id) = 4) category ON category.ca_id = item.it_ca_id "
                        "    LEFT JOIN ( SELECT mb_name as seller_name, mb_hp as seller_tel, mb_no as seller_no FROM g5_member WHERE mb_level = 8) mb_seller ON mb_seller.seller_no = cart.seller_mb_no "
                        "    LEFT JOIN ( SELECT *, mb_no as seller_mb_no from tbl_member_seller ) seller on seller.seller_mb_no=mb_seller.seller_no "
-                       "ORDER BY ct_id ASC ")
+                       "ORDER BY ct_id ASC ", mb_id)
         connection.commit()
         rows = cursor.fetchall()
         row_count = cursor.rowcount

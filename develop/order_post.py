@@ -4,7 +4,14 @@ import pymysql
 import urllib3
 
 def lambda_handler(event, context):
-    mb_id = 'cardoc'
+    if 'member_id' not in event:
+        return {
+            'statusCode': 402,
+            'message': "parameter error",
+            "data": json.dumps(event)
+        }
+
+    mb_id = event['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
     nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')

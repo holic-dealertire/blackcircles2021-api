@@ -4,7 +4,14 @@ import pymysql
 
 
 def lambda_handler(event, context):
-    mb_id = 'cardoc'
+    if 'member_id' not in event:
+        return {
+            'statusCode': 402,
+            'message': "parameter error",
+            "data": json.dumps(event)
+        }
+
+    mb_id = event['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -45,6 +52,16 @@ def lambda_handler(event, context):
     if od_id:
         connection = db_connect()
         cursor = connection.cursor()
+
+        cursor.execute("select retail_type from (SELECT mb_no FROM g5_member WHERE mb_id ='" + mb_id + "' and mb_level = 5 and mb_14 = 1) member left join (select mb_no as retail_mb_no, retail_type from tbl_member_retail) retail on retail.retail_mb_no=member.mb_no")
+        connection.commit()
+        retail_type = cursor.fetchone()
+        if retail_type is None:
+            return {
+                'statusCode': 202,
+                'message': "member_id is not exist"
+            }
+
         # 주문정보
         cursor.execute("select od_name, od_tel, concat(od_zip1, od_zip2) as od_zip, od_addr1, od_addr2, od_addr3, od_memo, od_receipt_price, od_time from g5_shop_order where od_id=%s and mb_id=%s", (od_id, mb_id))
         connection.commit()

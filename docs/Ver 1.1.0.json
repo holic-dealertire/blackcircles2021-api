@@ -224,7 +224,7 @@
           },
           {
             "name": "od_id",
-            "in": "path",
+            "in": "query",
             "description": "주문번호",
             "required": true,
             "type": "integer"
