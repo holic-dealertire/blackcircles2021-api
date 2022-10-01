@@ -170,7 +170,7 @@ def lambda_handler(event, context):
                  (
                         select io_no as stock_io_no, mb_no as stock_mb_no, sale_delivery
                         from tbl_item_option_price_stock
-                        where stock > %s and io_no = %s and sale_delivery < %s AND sale_delivery >= %s
+                        where stock >= %s and io_no = %s and sale_delivery < %s AND sale_delivery >= %s
                  ) stock
                 LEFT JOIN (SELECT io_no AS check_io_no, it_id AS check_io_it_id FROM   g5_shop_item_option
                                                           WHERE  origin_io_no IS NULL) opt
@@ -212,6 +212,7 @@ def lambda_handler(event, context):
         if idx != '':
             seller_no = seller_array[idx]
 
+        stock = 0
         delv_date = ''
         if seller_no == '' or seller_no is None:
             seller_no = "NULL"
@@ -220,6 +221,10 @@ def lambda_handler(event, context):
             connection.commit()
             delv_date = cursor.fetchone()
             delv_date = delv_date[0]
+            cursor.execute("""select stock from tbl_item_option_price_stock where mb_no = %s and io_no = %s""", (str(seller_no), str(io_no)))
+            connection.commit()
+            stock = cursor.fetchone()
+            stock = stock[0]
 
         io_price = round(int(row[10]) - (int(row[10]) / 100 * io_sale), -3)
         io_info['io_size'] = str(row[0])
@@ -238,7 +243,7 @@ def lambda_handler(event, context):
         io_info['it_pattern'] = str(row[13])
         io_info['it_season'] = str(row[14])
         io_info['it_performance_type'] = str(row[15])
-        io_info['tot_stock'] = int(row[16]) #todo 여기 판매자가 보유한 재고로 리턴해줘야됨
+        io_info['stock'] = stock
         io_info['io_price'] = int(io_price)
         io_info['io_sale'] = row[17]
         io_info['io_delivery_price'] = row[19]
@@ -258,7 +263,7 @@ def lambda_handler(event, context):
             'data': json.dumps(rows, ensure_ascii=False, cls=JSONEncoder)
         }
 
-    elif return_list['tot_stock'] is None:
+    elif return_list['stock'] is None:
         return {
             'statusCode': 201,
             'message': "no stock",
