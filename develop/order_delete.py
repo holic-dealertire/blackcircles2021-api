@@ -5,24 +5,25 @@ import urllib3
 
 
 def lambda_handler(event, context):
-    if 'member_id' not in event:
+    if 'member_id' not in event["queryParams"]:
         return {
             'statusCode': 402,
             'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    mb_id = event['member_id']
+    mb_id = event['queryParams']['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
 
-    if 'od_id' not in event or 'refund_request' not in event:
+    if 'od_id' not in event['body'] or 'refund_request' not in event['body']:
         return {
             'statusCode': 402,
-            'message': "parameter error"
+            'message': "parameter error",
+            "data": json.dumps(event)
         }
 
-    od_id = event['od_id']
+    od_id = event['body']['od_id']
     seq = 0
 
     if type(od_id) is int:
@@ -53,7 +54,7 @@ def lambda_handler(event, context):
             }
 
         row_count = cursor.rowcount
-        length = len(event['refund_request'])
+        length = len(event['body']['refund_request'])
         od_cart_count = order_info[1]
         od_mod_history = order_info[2]
         od_zip1 = order_info[3]
@@ -70,9 +71,9 @@ def lambda_handler(event, context):
             }
 
         for i in range(length):
-            io_part_no = event['refund_request'][i]['io_part_no']
-            refund_reason = event['refund_request'][i]['refund_reason']
-            ct_cancel_req_time = event['refund_request'][i]['ct_cancel_req_time']
+            io_part_no = event['body']['refund_request'][i]['io_part_no']
+            refund_reason = event['body']['refund_request'][i]['refund_reason']
+            ct_cancel_req_time = event['body']['refund_request'][i]['ct_cancel_req_time']
 
             if io_part_no:
                 cursor.execute("select io_no from g5_shop_item_option where io_part_no=%s", io_part_no)

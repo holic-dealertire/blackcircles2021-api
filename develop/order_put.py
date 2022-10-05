@@ -4,30 +4,30 @@ import pymysql
 
 
 def lambda_handler(event, context):
-    if 'member_id' not in event:
+    if 'member_id' not in event['queryParams']:
         return {
             'statusCode': 402,
             'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    mb_id = event['member_id']
+    mb_id = event['queryParams']['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d %H:%M:%S')
 
-    if 'od_id' not in event or 'od_name' not in event or 'od_tel' not in event or 'od_zip' not in event or 'od_addr1' not in event or 'od_addr2' not in event or 'od_addr3' not in event or 'cart_status' not in event:
+    if 'od_id' not in event['body'] or 'od_name' not in event['body'] or 'od_tel' not in event['body'] or 'od_zip' not in event['body'] or 'od_addr1' not in event['body'] or 'od_addr2' not in event['body'] or 'od_addr3' not in event['body'] or 'cart_status' not in event['body']:
         return {
             'statusCode': 402,
             'message': "parameter error"
         }
 
-    od_id = event['od_id']
-    od_name = event['od_name']
-    od_tel = event['od_tel']
-    od_addr1 = event['od_addr1']
-    od_addr2 = event['od_addr2']
-    od_addr3 = event['od_addr3']
-    od_zip = event['od_zip']
+    od_id = event['body']['od_id']
+    od_name = event['body']['od_name']
+    od_tel = event['body']['od_tel']
+    od_addr1 = event['body']['od_addr1']
+    od_addr2 = event['body']['od_addr2']
+    od_addr3 = event['body']['od_addr3']
+    od_zip = event['body']['od_zip']
     od_zip1 = ''
     od_zip2 = ''
     if od_zip:
@@ -37,11 +37,6 @@ def lambda_handler(event, context):
     # 타입검사 & 변환
     if type(od_id) is int:
         od_id = str(od_id)
-    else:
-        return {
-            'statusCode': 402,
-            'message': "parameter error"
-        }
 
     if type(od_name) is int or type(od_addr1) is int or type(od_addr2) is int:
         return {
@@ -75,7 +70,7 @@ def lambda_handler(event, context):
 
         row_count = cursor.rowcount
         length = 0
-        cart_status = event.get('cart_status')
+        cart_status = event['body']['cart_status']
         if cart_status:
             length = len(cart_status)
 
@@ -112,8 +107,9 @@ def lambda_handler(event, context):
             connection.commit()
 
         for i in range(length):
-            io_part_no = event['cart_status'][i]['io_part_no']
-            ct_status = event['cart_status'][i]['ct_status']
+            io_part_no = event['body']['cart_status'][i]['io_part_no']
+            ct_status = event['body']['cart_status'][i]['ct_status']
+
             if io_part_no is not None:
                 cursor.execute("select io_no from g5_shop_item_option where io_part_no=%s", io_part_no)
                 connection.commit()
@@ -128,11 +124,16 @@ def lambda_handler(event, context):
                 if cart_count == 0:
                     continue
 
-                if ct_status == '완료' or ct_status == '확정':
+                if ct_status == "완료" or ct_status == "확정":
                     if cart_info[1] == '입금' or cart_info[1] == '준비' or cart_info[1] == '배송' or cart_info[1] == '완료':
                         ct_history = cart_info[2] + "\n" + nowDate + " 구매자 " + cart_info[1]
                         cursor.execute("update g5_shop_cart set ct_status=%s, ct_history=%s where ct_id=%s", (ct_status, ct_history, cart_info[0]))
                         connection.commit()
+                        return {
+                            'statusCode': 200,
+                            'message': "success",
+                            "ct_history": json.dumps(ct_history)
+                        }
 
         cursor.close()
         connection.close()

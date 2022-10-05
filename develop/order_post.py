@@ -8,34 +8,34 @@ import random
 
 
 def lambda_handler(event, context):
-    if 'member_id' not in event:
+    if 'member_id' not in event['queryParams']:
         return {
             'statusCode': 402,
-            'message': "parameter error1",
+            'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    mb_id = event['member_id']
+    mb_id = event['queryParams']['member_id']
     now = datetime.datetime.now()
     nowDate = now.strftime('%Y-%m-%d')
     nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
 
-    if 'od_id' not in event or 'od_name' not in event or 'od_tel' not in event or 'od_zip' not in event or 'od_addr1' not in event or 'od_addr2' not in event or 'od_addr3' not in event or 'cart_item' not in event:
+    if 'od_id' not in event['body'] or 'od_name' not in event['body'] or 'od_tel' not in event['body'] or 'od_zip' not in event['body'] or 'od_addr1' not in event['body'] or 'od_addr2' not in event['body'] or 'od_addr3' not in event['body'] or 'cart_item' not in event['body']:
         return {
             'statusCode': 402,
-            'message': "parameter error2",
+            'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    od_id = event['od_id']
-    od_name = event['od_name']
-    od_tel = event['od_tel']
-    od_addr1 = event['od_addr1']
-    od_addr2 = event['od_addr2']
-    od_addr3 = event['od_addr3']
-    od_reserv_date = event['od_reserv_date']
+    od_id = event['body']['od_id']
+    od_name = event['body']['od_name']
+    od_tel = event['body']['od_tel']
+    od_addr1 = event['body']['od_addr1']
+    od_addr2 = event['body']['od_addr2']
+    od_addr3 = event['body']['od_addr3']
+    od_reserv_date = event['body']['od_reserv_date']
     od_memo = ''
-    od_zip = event['od_zip']
+    od_zip = event['body']['od_zip']
     od_zip1 = ''
     od_zip2 = ''
     if od_zip:
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
     if type(od_name) is int or type(od_addr1) is int or type(od_addr2) is int:
         return {
             'statusCode': 402,
-            'message': "parameter error4"
+            'message': "parameter error"
         }
 
     if od_id:
@@ -75,15 +75,15 @@ def lambda_handler(event, context):
                     'message': "member_id is not exist"
                 }
 
-            length = len(event['cart_item'])
+            length = len(event['body']['cart_item'])
             od_receipt_price = 0
             tot_price = 0
             for i in range(length):
-                input_io_part_no = event['cart_item'][i]['io_part_no']
-                input_ct_qty = event['cart_item'][i]['ct_qty']
-                input_ct_sale = event['cart_item'][i]['ct_sale']
-                input_seller_no = event['cart_item'][i]['seller_no']
-                input_it_sc_price = event['cart_item'][i]['it_sc_price']
+                input_io_part_no = event['body']['cart_item'][i]['io_part_no']
+                input_ct_qty = event['body']['cart_item'][i]['ct_qty']
+                input_ct_sale = event['body']['cart_item'][i]['ct_sale']
+                input_seller_no = event['body']['cart_item'][i]['seller_no']
+                input_it_sc_price = event['body']['cart_item'][i]['it_sc_price']
 
                 if type(input_io_part_no) is int:
                     input_io_part_no = str(input_io_part_no)
@@ -116,7 +116,7 @@ def lambda_handler(event, context):
                 if io_info is None:
                     return {
                         'statusCode': 202,
-                        'message': "io_part_no is not exist1"
+                        'message': "io_part_no is not exist"
                     }
                 io_no = io_info[0]
                 io_delivery_price = io_info[1]
@@ -127,7 +127,7 @@ def lambda_handler(event, context):
                 if io_no is None or range_1 is None or io_sell_price_premium is None:
                     return {
                         'statusCode': 402,
-                        'message': "parameter error5"
+                        'message': "parameter error"
                     }
                 if input_ct_qty < 1:
                     return {
@@ -177,7 +177,7 @@ def lambda_handler(event, context):
                 if option_info is None:
                     return {
                         'statusCode': 202,
-                        'message': "io_part_no is not exist2"
+                        'message': "io_part_no is not exist"
                     }
 
                 io_no = option_info[0]
