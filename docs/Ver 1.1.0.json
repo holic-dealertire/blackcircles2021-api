@@ -403,6 +403,11 @@
           "description": "받는분 연락처",
           "example": "010-1234-5678"
         },
+        "od_zip": {
+          "type": "string",
+          "description": "우편번호",
+          "example": "01234"
+        },
         "od_addr1": {
           "type": "string",
           "description": "받는분 주소(도로명)",

@@ -260,21 +260,21 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'message': "success",
-            'data': json.dumps(rows, ensure_ascii=False, cls=JSONEncoder)
+            'data': json.dumps(rows, ensure_ascii=False, cls=JSONEncoder, default=str)
         }
 
     elif return_list['stock'] is None:
         return {
             'statusCode': 201,
             'message': "no stock",
-            'data': json.dumps(return_list, ensure_ascii=False, cls=JSONEncoder)
+            'data': json.dumps(return_list, ensure_ascii=False, cls=JSONEncoder, default=str)
         }
 
     else:
         return {
             'statusCode': 200,
             'message': "success",
-            'data': json.dumps(return_list, ensure_ascii=False, cls=JSONEncoder)
+            'data': json.dumps(return_list, ensure_ascii=False, cls=JSONEncoder, default=str)
         }
 
 
