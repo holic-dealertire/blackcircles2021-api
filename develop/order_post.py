@@ -156,19 +156,16 @@ def lambda_handler(event, context):
                 seller_sale_delivery = sale_info[0]
                 seller_delivery_price = sale_info[1]
 
-                if seller_sale_delivery > io_sell_price_premium:
-                    ct_sale = input_ct_sale
+                if input_ct_sale < seller_sale_delivery and (input_ct_sale == io_sell_price_premium or input_ct_sale == io_sell_price_premium - range_1 or input_ct_sale == io_sell_price_premium - range_1 - range_2 or input_ct_sale == io_sell_price_premium - range_1 - range_2 - range_3 or input_ct_sale == seller_sale_delivery - 2):
+                    ordered_sale = seller_sale_delivery
                 else:
                     return {
                         'statusCode': 423,
                         'message': "seller's sale does not match"
                     }
 
-                if seller_delivery_price is None or seller_delivery_price < 0:
-                    seller_delivery_price = 0
-
                 cursor.execute("select io_no, it_id, delivery_idx, delivery_seller_no, sale_delivery, it_name, delivery_collect, io_size, io_id, delivery_price1, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type, idx "
-                               "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_part_no=%s and io_btob_price > 0 and io_btob_lowest is not null) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
+                               "    from (select io_no, it_id as io_it_id, io_btob_price, io_btob_lowest, io_size, io_id, io_factory_price, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type from g5_shop_item_option where io_no=%s) opt left join (select it_id, ca_id as it_ca_id, it_name from g5_shop_item) item on opt.io_it_id=item.it_id"
                                "    left join ("
                                "                select * from ("
                                "                                    select * from ("
@@ -182,7 +179,7 @@ def lambda_handler(event, context):
                                "                              ) stock"
                                "                 group by stock.stock_io_no"
                                "           ) as delivery_price"
-                               " on delivery_price.stock_io_no=opt.io_no", (io_part_no, ct_qty, io_part_no, nowDate, nowDate))
+                               " on delivery_price.stock_io_no=opt.io_no", (io_no, ct_qty, io_part_no, nowDate, nowDate))
                 connection.commit()
                 option_info = cursor.fetchone()
 
@@ -233,8 +230,9 @@ def lambda_handler(event, context):
                 if it_sc_price > 0 and delivery_collect == '0':
                     it_sc_type = '3'
 
-                cursor.execute("insert into g5_shop_cart set od_id=%s, mb_id=%s, it_id=%s, it_name=%s, it_sc_type=%s, it_sc_method='0', it_delv_type='2', it_sc_price=%s, it_sc_minimum='0', it_sc_qty='0', ct_status='입금', ct_price='0', ct_sale=%s, ct_point='0', ct_point_use='0', ct_stock_use='1', ct_option=%s, ct_qty=%s, ct_notax='0', io_no=%s, io_id=%s, io_type='1', io_price=%s, ct_time=%s, ct_send_cost='0', ct_direct='0', ct_select='1', ct_select_time=%s, stock_idx=%s, "
-                               "seller_mb_no=%s, ct_orderable='1'", (od_id, mb_id, it_id, it_name, it_sc_type, it_sc_price, sale, io_size, ct_qty, io_no, io_id, price, nowDatetime, nowDatetime, delivery_idx, seller_mb_no))
+                cursor.execute(
+                    "insert into g5_shop_cart set od_id=%s, mb_id=%s, it_id=%s, it_name=%s, it_sc_type=%s, it_sc_method='0', it_delv_type='2', it_sc_price=%s, it_sc_minimum='0', it_sc_qty='0', ct_status='입금', ct_price='0', ct_sale=%s, ct_point='0', ct_point_use='0', ct_stock_use='1', ct_option=%s, ct_qty=%s, ct_notax='0', io_no=%s, io_id=%s, io_type='1', io_price=%s, ct_time=%s, ct_send_cost='0', ct_direct='0', ct_select='1', ct_select_time=%s, stock_idx=%s, "
+                    "seller_mb_no=%s, ct_orderable='1'", (od_id, mb_id, it_id, it_name, it_sc_type, it_sc_price, sale, io_size, ct_qty, io_no, io_id, price, nowDatetime, nowDatetime, delivery_idx, seller_mb_no))
                 connection.commit()
 
                 cursor.execute("update tbl_item_option_price_stock set stock = stock - %s where idx = %s", (str(ct_qty), idx))
@@ -294,9 +292,10 @@ def lambda_handler(event, context):
                     }]
                     http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
 
-            cursor.execute("insert into g5_shop_order set od_id=%s, mb_id=%s, od_pwd='', od_name=%s, od_email='', od_tel=%s, od_hp=%s, od_zip1=%s, od_zip2=%s, od_addr1=%s, od_addr2=%s, od_addr3=%s, od_addr_jibeon='', od_b_name=%s, od_b_tel=%s, od_b_hp=%s, od_b_zip1=%s, od_b_zip2=%s, od_b_addr1=%s, od_b_addr2=%s, od_b_addr3=%s, od_b_addr_jibeon='', od_deposit_name=%s, od_cart_count=%s, od_cart_price=%s, od_cart_coupon=0, od_send_cost=0, od_send_cost2=0, od_coupon=0, "
-                           "od_cal_coupon_point=0, od_receipt_price=%s, od_receipt_point=0, od_bank_account='', od_receipt_time=%s, od_misu=0, od_pg='cardoc', od_tno='', od_app_no='cardoc', od_escrow='', od_tax_flag='', od_tax_mny='', od_vat_mny='', od_free_mny='', od_status='입금', od_shop_memo='', od_hope_date='', od_time=%s, od_settle_case='cardoc', od_test='', od_vbank_expire='', od_reserv_date=%s",
-                           (od_id, mb_id, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, length, tot_price, od_receipt_price, nowDatetime, nowDatetime, od_reserv_date))
+            cursor.execute(
+                "insert into g5_shop_order set od_id=%s, mb_id=%s, od_pwd='', od_name=%s, od_email='', od_tel=%s, od_hp=%s, od_zip1=%s, od_zip2=%s, od_addr1=%s, od_addr2=%s, od_addr3=%s, od_addr_jibeon='', od_b_name=%s, od_b_tel=%s, od_b_hp=%s, od_b_zip1=%s, od_b_zip2=%s, od_b_addr1=%s, od_b_addr2=%s, od_b_addr3=%s, od_b_addr_jibeon='', od_deposit_name=%s, od_cart_count=%s, od_cart_price=%s, od_cart_coupon=0, od_send_cost=0, od_send_cost2=0, od_coupon=0, "
+                "od_cal_coupon_point=0, od_receipt_price=%s, od_receipt_point=0, od_bank_account='', od_receipt_time=%s, od_misu=0, od_pg='cardoc', od_tno='', od_app_no='cardoc', od_escrow='', od_tax_flag='', od_tax_mny='', od_vat_mny='', od_free_mny='', od_status='입금', od_shop_memo='', od_hope_date='', od_time=%s, od_settle_case='cardoc', od_test='', od_vbank_expire='', od_reserv_date=%s",
+                (od_id, mb_id, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, od_tel, od_tel, od_zip1, od_zip2, od_addr1, od_addr2, od_addr3, od_name, length, tot_price, od_receipt_price, nowDatetime, nowDatetime, od_reserv_date))
             connection.commit()
             connection.close()
 

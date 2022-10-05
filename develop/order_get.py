@@ -1,6 +1,7 @@
 import datetime
 import json
 import pymysql
+from decimal import Decimal
 
 
 def lambda_handler(event, context):
@@ -76,7 +77,7 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 200,
                 'message': "success",
-                'data': json.dumps(return_list, indent=4, sort_keys=False, default=str)
+                'data': json.dumps(return_list, ensure_ascii=False, cls=JSONEncoder)
             }
 
     return {
@@ -85,6 +86,12 @@ def lambda_handler(event, context):
     }
 
 def db_connect():
-    connection = pymysql.connect(host="blackcircles2021.cluster-c2syf7kukikc.ap-northeast-2.rds.amazonaws.com", user="admin", password="Dealertire0419**", db="blackcircles_develop")
-
+    connection = pymysql.connect(host="read.c2syf7kukikc.ap-northeast-2.rds.amazonaws.com", user="admin", password="Dealertire0419**", db="blackcircles_develop")
     return connection
+
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
