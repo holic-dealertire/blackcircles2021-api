@@ -131,6 +131,8 @@ def lambda_handler(event, context):
             io_sale = int(row[17])
         else:
             io_sale = row[17]
+        if io_sale < 0:
+            io_sale = 0
         io_no = row[25]
         io_sell_price_premium = row[21]
         range_1 = row[22]
@@ -245,7 +247,7 @@ def lambda_handler(event, context):
         io_info['it_performance_type'] = str(row[15])
         io_info['stock'] = stock
         io_info['io_price'] = int(io_price)
-        io_info['io_sale'] = row[17]
+        io_info['io_sale'] = io_sale
         io_info['io_delivery_price'] = row[19]
         io_info['io_discontinued'] = str(row[18])
         io_info['ca_name'] = str(row[20])
