@@ -131,7 +131,7 @@ def lambda_handler(event, context):
             io_sale = int(row[17])
         else:
             io_sale = row[17]
-        if io_sale < 0:
+        if io_sale is None or io_sale < 0:
             io_sale = 0
         io_no = row[25]
         io_sell_price_premium = row[21]
@@ -150,7 +150,9 @@ def lambda_handler(event, context):
         range_max = 100
 
         # 최소 최대 할인율
-        if io_sale >= io_sell_price_premium:
+        if io_sell_price_premium is None:
+            range_min = 0
+        elif io_sale >= io_sell_price_premium:
             range_min = io_sell_price_premium + 2
         elif (io_sell_price_premium - range_1) <= io_sale < (io_sell_price_premium + 2):
             range_min = io_sell_price_premium - range_1 + 2
