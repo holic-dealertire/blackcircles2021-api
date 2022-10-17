@@ -3,6 +3,7 @@ import json
 import pymysql
 from decimal import Decimal
 
+
 # 알고리즘 적용 완료
 
 def lambda_handler(event, context):
@@ -30,7 +31,7 @@ def lambda_handler(event, context):
     nowDate = now.strftime('%Y-%m-%d')
 
     cursor.execute("""
-    select io_size, io_size_origin, io_part_no, io_pr, io_max_weight, io_speed, io_car, io_oe, io_car_type, io_tire_type, io_factory_price, io_maker, it_name, it_pattern, it_season, it_performance_type, delivery_stock, price, io_discontinued, io_delivery_price, ca_name
+    select io_size, io_size_origin, io_part_no, io_pr, io_max_weight, io_speed, io_car, io_oe, io_car_type, io_tire_type, io_factory_price, io_maker, it_name, it_pattern, it_season, it_performance_type, delivery_stock, price, io_discontinued, io_delivery_price, ca_name, max_stock
     from (select io_no as chk_io_no from tbl_item_option_price_stock where stock > 0 group by io_no) check_stock
              left join
     (SELECT io_no, it_id AS io_it_id, io_size, io_part_no, io_size_origin, io_pr, io_max_weight, io_speed, io_car, io_oe, io_tire_type, io_factory_price, io_maker, io_car_type, sell_cnt, io_btob_lowest, io_btob_price, io_discontinued, io_delivery_price
@@ -41,7 +42,7 @@ def lambda_handler(event, context):
              LEFT JOIN (select ca_id, ca_name from g5_shop_category) cate on cate.ca_id = item.item_ca_id
              LEFT JOIN
     (select *
-     from (select *, CAST(SUM(sum_stock) AS SIGNED) as delivery_stock
+     from (select *, CAST(SUM(sum_stock) AS SIGNED) as delivery_stock, MAX(stock) AS max_stock
            from (SELECT *
                  FROM (SELECT *,
                            CASE
@@ -119,10 +120,15 @@ def lambda_handler(event, context):
         else:
             io_delivery_price = row[19]
 
+        if row[21] is None:
+            max_stock = 0
+        else:
+            max_stock = row[21]
+
         io_info = {'io_size': row[0], 'io_size_origin': row[1], 'io_part_no': row[2], 'io_pr': row[3], 'io_max_weight': row[4], 'io_speed': row[5], 'io_car': row[6], 'io_oe': row[7],
                    'io_car_type': row[8], 'io_tire_type': row[9], 'io_factory_price': io_factory_price, 'io_maker': row[11], 'it_name': row[12], 'it_pattern': row[13], 'it_season': row[14],
                    'it_performance_type': row[15],
-                   'tot_stock': tot_stock, 'io_price': io_price, 'io_sale': io_sale, 'io_delivery_price': io_delivery_price, 'io_discontinued': row[18], 'ca_name': row[20]}
+                   'tot_stock': tot_stock, 'io_price': io_price, 'io_sale': io_sale, 'io_delivery_price': io_delivery_price, 'io_discontinued': row[18], 'ca_name': row[20], 'max_stock': max_stock}
 
         return_list.append(io_info)
 
