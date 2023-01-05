@@ -96,7 +96,7 @@ def lambda_handler(event, context):
                                  Sum(stock) AS sum_stock
                              FROM (SELECT io_no AS stock_io_no, sale_delivery, stock, mb_no AS stock_mb_no, idx as delivery_idx
                                    FROM tbl_item_option_price_stock
-                                   WHERE stock > 0) stock
+                                   WHERE stock > 3) stock
                                       LEFT JOIN (SELECT io_no AS check_io_no, it_id AS check_io_it_id, io_sell_price_basic, io_sell_price_premium
                                                  FROM g5_shop_item_option
                                                  WHERE origin_io_no IS NULL) check_option

@@ -191,6 +191,21 @@
           },
           "405": {
             "description": "not enough stock"
+          },
+          "420": {
+            "description": "ct_qty must be at least 1"
+          },
+          "421": {
+            "description": "delivery_price does not match"
+          },
+          "422": {
+            "description": "seller's sale is not exist"
+          },
+          "423": {
+            "description": "seller's sale does not match"
+          },
+          "424": {
+            "description": "seller's stock not enough"
           }
         },
         "tags": [
