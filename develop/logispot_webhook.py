@@ -8,16 +8,16 @@ import random
 
 
 def lambda_handler(event, context):
-    if 'event_type' not in event['body'] or 'event_at' not in event['body'] or 'order_id' not in event['body']:
+    if 'event_type' not in event or 'event_at' not in event or 'order_id' not in event:
         return {
             'statusCode': 402,
             'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    event_type = event['body']['event_type']
-    event_at = event['body']['event_at']
-    order_id = event['body']['order_id']
+    event_type = event['event_type']
+    event_at = event['event_at']
+    order_id = event['order_id']
 
     # 타입검사 & 변환
     if type(event_type) is str:
@@ -30,9 +30,9 @@ def lambda_handler(event, context):
         connection = db_connect()
         cursor = connection.cursor()
 
-        if event_type == 1000:
-            cursor.execute("update g5_shop_cart set ct_status='배송', ct_invoice_time = now() where ct_logispot_id=%s and ct_status='입금'", order_id)
-        if event_type == 2000:
+        if event_type == 1000 or event_type == '1000':
+            cursor.execute("update g5_shop_cart set ct_status='배송', ct_invoice_time = now() where ct_logispot_id=%s and ct_status='준비'", order_id)
+        if event_type == 2000 or event_type == '2000':
             cursor.execute("update g5_shop_cart set ct_status='완료', ct_complete_time = now() where ct_logispot_id=%s and ct_status='배송'", order_id)
 
         connection.commit()
