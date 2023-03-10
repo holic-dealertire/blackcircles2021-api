@@ -32,7 +32,7 @@ def lambda_handler(event, context):
         cursor = connection.cursor()
 
         # 장바구니
-        cursor.execute("SELECT cart_od_id, ct_qty, cart_io_no, ca_it_id, it_name, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type, od_name, od_tel, od_addr1, od_addr2, od_addr3, od_memo, seller_tel, clerk_tel1, clerk_tel2, clerk_tel3, seller_name FROM "
+        cursor.execute("SELECT cart_od_id, ct_qty, cart_io_no, ca_it_id, it_name, io_size_origin, io_pr, io_max_weight, io_speed, io_car_type, io_maker, io_oe, io_tire_type, od_name, od_tel, od_addr1, od_addr2, od_addr3, od_memo, seller_tel, clerk_tel1, clerk_tel2, clerk_tel3, seller_name, ct_id FROM "
                      "    ( SELECT *, it_id AS ca_it_id, io_no AS cart_io_no, od_id as cart_od_id FROM g5_shop_cart WHERE ct_logispot_id = '" + order_id + "') cart "
                      "    LEFT JOIN ( SELECT it_id, ca_id AS it_ca_id FROM g5_shop_item) item ON item.it_id = cart.ca_it_id "
                      "    LEFT JOIN ( SELECT io_no, io_size_origin, io_pr, io_max_weight, io_speed, io_car, io_oe, io_tire_type, io_factory_price, io_maker, io_car_type, origin_io_no, io_part_no FROM g5_shop_item_option) opt ON opt.io_no = cart.cart_io_no "
@@ -49,6 +49,14 @@ def lambda_handler(event, context):
                 'statusCode': 202,
                 'message': "order is not exist"
             }
+
+        ct_id = cart[24]
+        if type(ct_id) is int:
+            ct_id = str(ct_id)
+
+        # 번호저장
+        cursor.execute("update g5_shop_cart set ct_invoice=%s where ct_id=%s", (phone_number, ct_id))
+        connection.commit()
 
         od_id = cart[0]
         if type(od_id) is int:
