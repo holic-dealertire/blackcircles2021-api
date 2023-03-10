@@ -8,15 +8,15 @@ import random
 
 
 def lambda_handler(event, context):
-    if 'driver_info' not in event or 'order_id' not in event:
+    if 'driver_info' not in event['body'] or 'order_id' not in event['body']:
         return {
             'statusCode': 402,
             'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    driver_info = event['driver_info']
-    order_id = event['order_id']
+    driver_info = event['body']['driver_info']
+    order_id = event['body']['order_id']
 
     # 타입검사 & 변환
     if type(order_id) is int:

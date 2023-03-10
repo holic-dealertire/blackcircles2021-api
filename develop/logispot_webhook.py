@@ -8,16 +8,15 @@ import random
 
 
 def lambda_handler(event, context):
-    if 'event_type' not in event or 'event_at' not in event or 'order_id' not in event:
+    if 'event_type' not in event['body'] or 'event_at' not in event['body'] or 'order_id' not in event['body']:
         return {
             'statusCode': 402,
             'message': "parameter error",
             "data": json.dumps(event)
         }
 
-    event_type = event['event_type']
-    event_at = event['event_at']
-    order_id = event['order_id']
+    event_type = event['body']['event_type']
+    order_id = event['body']['order_id']
 
     # 타입검사 & 변환
     if type(event_type) is str:
