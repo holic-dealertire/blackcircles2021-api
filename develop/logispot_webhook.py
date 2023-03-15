@@ -13,7 +13,7 @@ def lambda_handler(event, context):
             "data": json.dumps(event)
         }
 
-    event_type = event['body']['event_type']
+    event_type = event['body']['order_place']['type']
     order_id = event['body']['order_id']
 
     # 타입검사 & 변환
@@ -35,10 +35,10 @@ def lambda_handler(event, context):
         retail_lng = order_info[2]
         retail_lat = order_info[3]
 
-        if event_type == 1000:
+        if event_type == 1:
             time = naver_direction_api(seller_lat, seller_lng, retail_lat, retail_lng)
             cursor.execute("update g5_shop_cart set ct_status='배송', ct_invoice_time = now(), ct_within_invoice_time = %s where ct_logispot_id=%s and ct_status='준비'", (time, order_id))
-        if event_type == 2000:
+        if event_type == 2:
             cursor.execute("update g5_shop_cart set ct_status='완료', ct_complete_time = now() where ct_logispot_id=%s and (ct_status='배송' or ct_status = '준비')", order_id)
 
         connection.commit()
@@ -56,7 +56,7 @@ def lambda_handler(event, context):
 
 
 def db_connect():
-    connection = pymysql.connect(host="blackcircles2021.cluster-c2syf7kukikc.ap-northeast-2.rds.amazonaws.com", user="admin", password="Dealertire0419**", db="blackcircles_develop")
+    connection = pymysql.connect(host="blackcircles2021.cluster-c2syf7kukikc.ap-northeast-2.rds.amazonaws.com", user="admin", password="Dealertire0419**", db="blackcircles_release")
 
     return connection
 
