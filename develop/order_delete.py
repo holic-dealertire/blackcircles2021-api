@@ -161,7 +161,7 @@ def lambda_handler(event, context):
                     option = io_size_origin + " | " + io_pr + " | " + io_max_weight + " | " + io_speed + " | " + io_car_type + " | " + io_maker + " | " + io_oe + " | " + io_tire_type
                     addr = "[" + od_zip1 + od_zip2 + "] " + od_addr1 + " " + od_addr2 + " " + od_addr3
                     del_type = "택배"
-                    od_tel = "카닥 주문건입니다. 블랙서클 담당자가 연락드리겠습니다."
+                    od_tel = "제휴 주문건입니다. 블랙서클 담당자가 연락드리겠습니다."
 
                     cursor.execute("select mb_hp, clerk_tel1, clerk_tel2, clerk_tel3 from (select mb_no, mb_hp from g5_member where mb_no = %s) mb left join (select mb_no as seller_mb_no, clerk_tel1, clerk_tel2, clerk_tel3 from tbl_member_seller) seller on seller.seller_mb_no=mb.mb_no", seller_mb_no)
                     connection.commit()
@@ -205,6 +205,24 @@ def lambda_handler(event, context):
                             "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
                         }]
                         http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
+
+                    data = [{
+                        "message_type": "at",
+                        "phn": "01072367771",
+                        "profile": "dd12d9e5886c35b5d6918831e0257d8e93a72c61",
+                        "tmplId": "renew_order_cancel_02",
+                        "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
+                    }]
+                    http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
+
+                    data = [{
+                        "message_type": "at",
+                        "phn": "01038082181",
+                        "profile": "dd12d9e5886c35b5d6918831e0257d8e93a72c61",
+                        "tmplId": "renew_order_cancel_02",
+                        "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
+                    }]
+                    http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
 
                     data = [{
                         "message_type": "at",
@@ -257,7 +275,7 @@ def lambda_handler(event, context):
                     option = io_size_origin + " | " + io_pr + " | " + io_max_weight + " | " + io_speed + " | " + io_car_type + " | " + io_maker + " | " + io_oe + " | " + io_tire_type
                     addr = "[" + od_zip1 + od_zip2 + "] " + od_addr1 + " " + od_addr2 + " " + od_addr3
                     del_type = "택배"
-                    od_tel = "카닥 주문건입니다. 블랙서클 담당자가 연락드리겠습니다."
+                    od_tel = "제휴 주문건입니다. 블랙서클 담당자가 연락드리겠습니다."
 
                     cursor.execute("select mb_hp, clerk_tel1, clerk_tel2, clerk_tel3 from (select mb_no, mb_hp from g5_member where mb_no = %s) mb left join (select mb_no as seller_mb_no, clerk_tel1, clerk_tel2, clerk_tel3 from tbl_member_seller) seller on seller.seller_mb_no=mb.mb_no", seller_mb_no)
                     connection.commit()
@@ -314,6 +332,24 @@ def lambda_handler(event, context):
                     data = [{
                         "message_type": "at",
                         "phn": "01056275408",
+                        "profile": "dd12d9e5886c35b5d6918831e0257d8e93a72c61",
+                        "tmplId": "renew_order_cancel_02",
+                        "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
+                    }]
+                    http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
+
+                    data = [{
+                        "message_type": "at",
+                        "phn": "01072367771",
+                        "profile": "dd12d9e5886c35b5d6918831e0257d8e93a72c61",
+                        "tmplId": "renew_order_cancel_02",
+                        "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
+                    }]
+                    http.request('POST', url, body=json.dumps(data), headers=headers, retries=False)
+
+                    data = [{
+                        "message_type": "at",
+                        "phn": "01038082181",
                         "profile": "dd12d9e5886c35b5d6918831e0257d8e93a72c61",
                         "tmplId": "renew_order_cancel_02",
                         "msg": "[블랙서클] 구매자가 주문을 취소하였습니다.\n▶ 주문번호 : " + od_id + "\n▶ 상품명 : " + it_name + "\n▶ 옵션 : " + option + "\n▶ 주문수량 : " + ct_qty + "개\n▶ 배송방식 : " + del_type + "\n▶ 배송지 : " + od_name + "\n" + addr + "\n▶ 구매자연락처 : " + od_tel + "\n▶ 취소사유 : " + refund_reason + ""
