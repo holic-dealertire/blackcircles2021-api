@@ -143,6 +143,41 @@
         "summary": "재고보유한 공급 상품 리스트"
       }
     },
+    "/item_match": {
+      "get": {
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "query",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success, return the array of match_model",
+            "schema": {
+              "$ref": "#/definitions/match_model"
+            }
+          },
+          "401": {
+            "description": "Invalid API key"
+          }
+        },
+        "tags": [
+          "match_model"
+        ],
+        "summary": "차종정보"
+      }
+    },
     "/order": {
       "post": {
         "operationId": "order",
@@ -961,6 +996,56 @@
           "type": "string",
           "description": "브랜드(카테고리)",
           "example": "한국 or 금호 or etc"
+        }
+      }
+    },
+    "match_model": {
+      "type": "object",
+      "properties": {
+        "brand_make": {
+          "type": "string",
+          "description": "국산/수입",
+          "example": "국산"
+        },
+        "brand_name": {
+          "type": "string",
+          "description": "브랜드명",
+          "example": "제네시스"
+        },
+        "brand_name_en": {
+          "type": "string",
+          "description": "브랜드명(영문)",
+          "example": "GENESIS"
+        },
+        "car_name": {
+          "type": "string",
+          "description": "자동차명",
+          "example": "GV80"
+        },
+        "model_name": {
+          "type": "string",
+          "description": "모델명",
+          "example": "GV80 3.0 디젤 AWD"
+        },
+        "position": {
+          "type": "string",
+          "description": "전륜/후륜",
+          "example": "전륜"
+        },
+        "inch": {
+          "type": "integer",
+          "description": "인치",
+          "example": "19"
+        },
+        "size": {
+          "type": "integer",
+          "description": "사이즈(숫자)",
+          "example": "2454517"
+        },
+        "size_origin": {
+          "type": "string",
+          "description": "사이즈",
+          "example": "245/45R17"
         }
       }
     }

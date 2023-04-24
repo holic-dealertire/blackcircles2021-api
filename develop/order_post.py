@@ -35,6 +35,9 @@ def lambda_handler(event, context):
     od_addr3 = event['body']['od_addr3']
     od_reserv_date = event['body']['od_reserv_date']
     od_memo = ''
+    if 'od_memo' in event['body']:
+        od_memo = event['body']['od_memo']
+
     od_zip = event['body']['od_zip']
     od_zip1 = ''
     od_zip2 = ''
@@ -203,7 +206,6 @@ def lambda_handler(event, context):
                 option = io_size_origin + " | " + io_pr + " | " + io_max_weight + " | " + io_speed + " | " + io_car_type + " | " + io_maker + " | " + io_oe + " | " + io_tire_type
                 del_type = "택배"
                 addr = "[" + od_zip1 + od_zip2 + "] " + od_addr1 + " " + od_addr2 + " " + od_addr3
-
 
                 price = io_factory_price
                 if sale > 0:
