@@ -8,6 +8,7 @@
       "email": "holic@dealertire.kr"
     }
   },
+  "host": "test.blackcircles.co.kr",
   "tags": [
     {
       "name": "item",
@@ -130,7 +131,7 @@
           "200": {
             "description": "success, return the array of item",
             "schema": {
-              "$ref": "#/definitions/item"
+              "$ref": "#/definitions/items"
             }
           },
           "401": {
@@ -143,7 +144,7 @@
         "summary": "재고보유한 공급 상품 리스트"
       }
     },
-    "/item_match": {
+    "/models": {
       "get": {
         "parameters": [
           {
@@ -159,13 +160,20 @@
             "description": "발급받은 회원아이디",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "사이즈(숫자)",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
             "description": "success, return the array of match_model",
             "schema": {
-              "$ref": "#/definitions/match_model"
+              "$ref": "#/definitions/models"
             }
           },
           "401": {
@@ -999,6 +1007,24 @@
         }
       }
     },
+    "models": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/match_model"
+          }
+        }
+      }
+    },
     "match_model": {
       "type": "object",
       "properties": {
@@ -1035,7 +1061,7 @@
         "inch": {
           "type": "integer",
           "description": "인치",
-          "example": "19"
+          "example": "17"
         },
         "size": {
           "type": "integer",
@@ -1053,6 +1079,5 @@
   "schemes": [
     "https"
   ],
-  "host": "test.blackcircles.co.kr",
   "basePath": "/"
 }

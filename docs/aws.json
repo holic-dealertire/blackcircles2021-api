@@ -1,0 +1,567 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "이 문서는 REST API를 사용한 블랙서클 API 사용법에 대하여 안내합니다. 일부 한정된 기능을 제공하는 버전입니다.\n***모든 request에는 발급받은 x-api-key를 header에 포함하고, 아이디를 body에 포함해서 보내주시면 됩니다.",
+    "version": "1.0.0",
+    "title": "Blackcircles-REST API",
+    "contact": {
+      "email": "holic@dealertire.kr"
+    }
+  },
+  "host": "test.blackcircles.co.kr",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "item",
+      "description": "상품에 대한 가격 정보"
+    },
+    {
+      "name": "order",
+      "description": "주문 관련"
+    }
+  ],
+  "paths": {
+    "/item": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/items"
+            }
+          },
+          "401": {
+            "description": "401 response"
+          }
+        },
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/item/{io_part_no}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "io_part_no",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/items"
+            }
+          },
+          "401": {
+            "description": "401 response"
+          }
+        },
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/items": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/items"
+            }
+          },
+          "401": {
+            "description": "401 response"
+          }
+        },
+        "tags": [
+          "item"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/order": {
+      "post": {
+        "operationId": "order",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
+            }
+          },
+          "400": {
+            "description": "400 response"
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
+            }
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderRefundResponse"
+            }
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/order/{od_id}": {
+      "get": {
+        "operationId": "getOrderById",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "od_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderResponse"
+            }
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "404": {
+            "description": "404 response"
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "od_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
+            }
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "404": {
+            "description": "404 response"
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "od_id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "od_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderRefundResponse"
+            }
+          },
+          "400": {
+            "description": "400 response"
+          },
+          "202": {
+            "description": "202 response"
+          },
+          "404": {
+            "description": "404 response"
+          }
+        },
+        "tags": [
+          "order"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/stock": {
+      "get": {
+        "responses": {},
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "x-api-key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "item": {
+      "type": "object",
+      "properties": {
+        "io_size": {
+          "type": "number"
+        },
+        "io_size_origin": {
+          "type": "string"
+        },
+        "io_part_no": {
+          "type": "string"
+        },
+        "io_pr": {
+          "type": "string"
+        },
+        "io_max_weight": {
+          "type": "string"
+        },
+        "io_speed": {
+          "type": "string"
+        },
+        "io_car": {
+          "type": "string"
+        },
+        "io_oe": {
+          "type": "string"
+        },
+        "io_car_type": {
+          "type": "string"
+        },
+        "io_tire_type": {
+          "type": "string"
+        },
+        "io_factory_price": {
+          "type": "number"
+        },
+        "io_maker": {
+          "type": "string"
+        },
+        "it_name": {
+          "type": "string"
+        },
+        "it_pattern": {
+          "type": "string"
+        },
+        "it_season": {
+          "type": "string"
+        },
+        "it_performance_type": {
+          "type": "string"
+        }
+      }
+    },
+    "OrderRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "OrderResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderInfo"
+          }
+        }
+      }
+    },
+    "OrderInfo": {
+      "type": "object",
+      "properties": {
+        "od_name": {
+          "type": "string",
+          "description": "받는분 성함"
+        },
+        "od_tel": {
+          "type": "string",
+          "description": "받는분 연락처"
+        },
+        "od_zip": {
+          "type": "string",
+          "description": "받는분 우편번호"
+        },
+        "od_addr1": {
+          "type": "string",
+          "description": "받는분 주소(도로명)"
+        },
+        "od_addr2": {
+          "type": "string",
+          "description": "받는분 주소(상세주소)"
+        },
+        "od_addr3": {
+          "type": "string",
+          "description": "받는분 주소(참고항목)"
+        },
+        "od_memo": {
+          "type": "string",
+          "description": "메모"
+        },
+        "od_receipt_price": {
+          "type": "integer",
+          "description": "총 가격 합계"
+        },
+        "od_ip": {
+          "type": "string",
+          "description": "주문자 ip"
+        },
+        "od_time": {
+          "type": "string",
+          "description": "format datetime"
+        },
+        "cart_item": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CartDeliveryInfo"
+          }
+        }
+      }
+    },
+    "OrderRefundResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CartDeliveryInfo": {
+      "type": "object",
+      "properties": {
+        "io_part_no": {
+          "type": "string"
+        },
+        "ct_qty": {
+          "type": "integer",
+          "description": "수량"
+        },
+        "ct_status": {
+          "type": "string",
+          "description": "주문상태"
+        },
+        "delivery_company": {
+          "type": "string",
+          "description": "배송회사"
+        },
+        "ct_invoice": {
+          "type": "string",
+          "description": "송장번호"
+        },
+        "ct_invoice_time": {
+          "type": "string",
+          "description": "배송시작일시(format datetime)"
+        },
+        "ct_complete_time": {
+          "type": "string",
+          "description": "배송완료일시(format datetime)"
+        },
+        "ct_confirm_time": {
+          "type": "string",
+          "description": "구매확정일시(format datetime)"
+        }
+      }
+    },
+    "items": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/item"
+          }
+        }
+      }
+    }
+  }
+}
