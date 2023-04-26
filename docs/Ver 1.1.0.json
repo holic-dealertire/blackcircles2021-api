@@ -186,6 +186,41 @@
         "summary": "차종정보"
       }
     },
+    "/retail": {
+      "get": {
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "X-API-KEY",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "member_id",
+            "in": "query",
+            "description": "발급받은 회원아이디",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success, return the array of match_model",
+            "schema": {
+              "$ref": "#/definitions/retail"
+            }
+          },
+          "401": {
+            "description": "Invalid API key"
+          }
+        },
+        "tags": [
+          "retail"
+        ],
+        "summary": "장착점 정보"
+      }
+    },
     "/order": {
       "post": {
         "operationId": "order",
@@ -1072,6 +1107,83 @@
           "type": "string",
           "description": "사이즈",
           "example": "245/45R17"
+        }
+      }
+    },
+    "retail": {
+      "type": "object",
+      "properties": {
+        "brand_make": {
+          "type": "integer",
+          "description": "회원번호",
+          "example": "58"
+        },
+        "mb_name": {
+          "type": "string",
+          "description": "상호명",
+          "example": "다스아우토"
+        },
+        "mb_tel": {
+          "type": "string",
+          "description": "연락처",
+          "example": "02-1234-5678"
+        },
+        "mb_zip": {
+          "type": "string",
+          "description": "우편번호",
+          "example": "11959"
+        },
+        "mb_addr": {
+          "type": "string",
+          "description": "주소",
+          "example": "경기 구리시 아차산로 312, 1층 (교문동)"
+        },
+        "company_photo": {
+          "type": "array",
+          "description": "매장사진",
+          "items": {
+            "$ref": "#/definitions/retail_image"
+          }
+        },
+        "business_weekday_start": {
+          "type": "string",
+          "description": "평일영업시작시간",
+          "example": "09:00"
+        },
+        "business_weekday_end": {
+          "type": "string",
+          "description": "평일영업마감시간",
+          "example": "17:00"
+        },
+        "business_weekend_start": {
+          "type": "string",
+          "description": "주말영업시작시간",
+          "example": "09:00"
+        },
+        "business_weekend_end": {
+          "type": "string",
+          "description": "주말영업마감시간",
+          "example": "17:00"
+        },
+        "holiday_saturday": {
+          "type": "string",
+          "description": "토요일휴무여부",
+          "example": ""
+        },
+        "holiday_sunday": {
+          "type": "string",
+          "description": "일요일휴무여부",
+          "example": "휴무"
+        }
+      }
+    },
+    "retail_image": {
+      "type": "object",
+      "properties": {
+        "image_url": {
+          "type": "string",
+          "description": "URL",
+          "example": "https://blackcircles-data.s3.ap-northeast-2.amazonaws.com/data/member_image/2021060710450016230303000529.jpg"
         }
       }
     }
