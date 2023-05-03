@@ -34,31 +34,28 @@ def lambda_handler(event, context):
     else:
         length = len(event['datas'])
         mb_no = mb_info[0]
+        io_no = ''
+        sql = 'insert into tbl_member_seller_stock(mb_id, io_part_no, stock, last_modify, mb_no) values '
+        print(sql)
+        sql_field = ''
         for i in range(length):
             io_part_no = event['datas'][i]['io_part_no']
             stock = int(event['datas'][i]['stock'])
-            cursor.execute("select io_no from g5_shop_item_option where io_part_no=%s", io_part_no)
-            connection.commit()
-            opt_info = cursor.fetchone()
-            opt_inset = cursor.rowcount
-            if opt_inset != 0:
-                io_no = opt_info[0]
-                if io_part_no and io_no:
-                    cursor.execute("select idx, stock from tbl_item_option_price_stock where mb_no=%s and io_no=%s", (mb_no, io_no))
-                    connection.commit()
-                    stock_info = cursor.fetchone()
-                    idx = ''
-                    origin_stock = ''
-                    if stock_info:
-                        idx = stock_info[0]
-                        origin_stock = stock_info[1]
-                    if idx and origin_stock != stock:
-                        cursor.execute("update tbl_item_option_price_stock set stock=%s, last_modify=now() where idx=%s", (stock, idx))
-                        # else:
-                        #     cursor.execute(
-                        #         "insert into tbl_item_option_price_stock set stock=%s")
-                        connection.commit()
-        connection.close()
+            sql_field += ",('{0}','{1}','{2}',now(), '{3}')".format(mb_id, io_part_no, stock, mb_no)
+
+        sql = sql + sql_field[1:]
+        sql += " ON DUPLICATE KEY UPDATE tbl_member_seller_stock.io_part_no = VALUES(tbl_member_seller_stock.io_part_no)"
+        sql += ",tbl_member_seller_stock.stock = VALUES(tbl_member_seller_stock.stock)"
+        sql += ",tbl_member_seller_stock.last_modify = VALUES(tbl_member_seller_stock.last_modify)"
+
+        cursor.execute(sql)
+        connection.commit()
+
+        cursor.execute("CALL updateSellerStock('{0}')".format(mb_no))
+        connection.commit()
+
+    cursor.close()
+    connection.close()
 
     return {
         'statusCode': 200,

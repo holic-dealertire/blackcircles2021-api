@@ -252,8 +252,10 @@ def lambda_handler(event, context):
                                                 stock_idx=%s, 
                                                 seller_mb_no=%s, 
                                                 ct_orderable='1', 
-                                                ordered_sale=%s""",
-                    (od_id, mb_id, it_id, it_name, it_sc_type, it_sc_price, sale, io_size, input_ct_qty, io_no, io_id, price, nowDatetime, nowDatetime, delivery_idx, seller_mb_no, ordered_sale))
+                                                ordered_sale=%s,
+                                                ct_factory_price=%s
+                                                """,
+                    (od_id, mb_id, it_id, it_name, it_sc_type, it_sc_price, sale, io_size, input_ct_qty, io_no, io_id, price, nowDatetime, nowDatetime, delivery_idx, seller_mb_no, ordered_sale, io_factory_price))
                 connection.commit()
 
                 cursor.execute("update tbl_item_option_price_stock set stock = stock - %s where idx = %s", (str(input_ct_qty), idx))
